@@ -1,5 +1,6 @@
 import CredentialsProvider from 'next-auth/providers/credentials'
 
+export default {
   debug: process.env.NODE_ENV !== 'production',
   providers: [
     CredentialsProvider({
@@ -59,6 +60,11 @@ import CredentialsProvider from 'next-auth/providers/credentials'
 
       if (token) {
         session.user.id = token.sub!
+        session.user.role = token.role
+      }
+      return session
+    }
+  },
   pages: {
     signIn: '/signin'
   }
