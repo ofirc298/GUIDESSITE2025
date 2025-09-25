@@ -1,5 +1,5 @@
 import { getServerSession } from 'next-auth'
-import { authOptions } from './options'
+import { getAuthOptions } from './options'
 import { log } from '@/lib/log'
 
 /**
@@ -8,7 +8,7 @@ import { log } from '@/lib/log'
  */
 export async function safeGetServerSession() {
   try {
-    return await getServerSession(authOptions)
+    return await getServerSession(getAuthOptions())
   } catch (e) {
     log.warn('auth', 'safeGetServerSession: No request scope available or error fetching session, returning null', (e as Error)?.message)
     return null

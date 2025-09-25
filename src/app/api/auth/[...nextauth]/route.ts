@@ -1,5 +1,5 @@
 import NextAuth from "next-auth"
-import { authOptions } from "@/lib/auth/options"
+import { getAuthOptions } from "@/lib/auth/options"
 
 export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
@@ -7,7 +7,7 @@ export const revalidate = 0
 
 // פונקציה ליצירת ה-NextAuth handler - נקראת רק כשיש בקשה בפועל
 function getAuthHandler() {
-  return NextAuth(authOptions)
+  return NextAuth(getAuthOptions())
 }
 
 export async function GET(req: Request, ctx: any) {
