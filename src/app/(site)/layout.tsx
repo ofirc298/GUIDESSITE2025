@@ -1,6 +1,5 @@
 import type { ReactNode } from 'react'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { safeGetServerSession } from '@/lib/safe-session'
 import AuthProvider from '@/components/providers/AuthProvider'
 import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
@@ -10,9 +9,20 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 export const runtime = 'nodejs'
 
-export default function SiteLayout({ children }: { children: ReactNode }) {
+export default async function SiteLayout({ children }: { children: ReactNode }) {
+  console.log('🔄 SiteLayout: Fetching session at:', new Date().toISOString())
+  
+  const session = await safeGetServerSession()
+  
+  console.log('🔄 SiteLayout: Session fetched:', {
+    hasSession: !!session,
+    userId: session?.user?.id,
+    userRole: session?.user?.role,
+    timestamp: new Date().toISOString()
+  })
+
   return (
-    <SessionGate>
+    <AuthProvider session={session}>
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Header />
         <main style={{ flex: 1 }}>
@@ -20,23 +30,6 @@ export default function SiteLayout({ children }: { children: ReactNode }) {
         </main>
         <Footer />
       </div>
-    </SessionGate>
+    </AuthProvider>
   )
-}
-
-// Server Component that runs inside a request
-async function SessionGate({ children }: { children: ReactNode }) {
-  console.log('🔄 SessionGate: Fetching session at:', new Date().toISOString())
-  
-  // Calling getServerSession inside a request-scoped async component is valid
-  const session = await getServerSession(authOptions)
-  
-  console.log('🔄 SessionGate: Session fetched:', {
-    hasSession: !!session,
-    userId: session?.user?.id,
-    userRole: session?.user?.role,
-    timestamp: new Date().toISOString()
-  })
-
-  return <AuthProvider session={session}>{children}</AuthProvider>
 }
