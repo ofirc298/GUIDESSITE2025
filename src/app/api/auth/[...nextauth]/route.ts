@@ -1,6 +1,5 @@
-// src/app/api/auth/[...nextauth]/route.ts
 import NextAuth from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { authOptions } from '@/lib/auth/options'
 
 // הכרחי ל-NextAuth: לא לרוץ ב-Edge, לא להיבנות סטטי
 export const runtime = 'nodejs'
@@ -12,10 +11,4 @@ export const fetchCache = 'force-no-store'
 // רק מייצרים handler ומייצאים GET/POST.
 const handler = NextAuth(authOptions)
 
-export async function GET(req: Request, ctx: { params: any }) {
-  return handler(req, ctx)
-}
-
-export async function POST(req: Request, ctx: { params: any }) {
-  return handler(req, ctx)
-}
+export { handler as GET, handler as POST }

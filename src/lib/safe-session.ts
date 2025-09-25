@@ -1,6 +1,6 @@
 import { headers } from 'next/headers'
 import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
+import { authOptions } from '@/lib/auth/options'
 
 /**
  * Returns null when called outside a valid request scope,
