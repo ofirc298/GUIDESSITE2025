@@ -1,12 +1,9 @@
 import AuthProvider from '@/components/providers/AuthProvider'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
-import AuthSessionProvider from '@/components/providers/AuthSessionProvider'
-
-export const dynamic = 'force-dynamic'
 
 export default async function SiteLayout({
   children,
@@ -14,8 +11,10 @@ export default async function SiteLayout({
   children: React.ReactNode
 }) {
   const session = await getServerSession(authOptions)
-}
-import { getServerSession } from 'next-auth'
-    </AuthProvider>
+
+  return (
     <AuthProvider session={session}>
+      {children}
+    </AuthProvider>
+  )
 }
