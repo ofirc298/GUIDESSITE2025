@@ -81,3 +81,5 @@ export const GET = withRouteLogging(async (
       { status: 500 }
     )
   }
+}
+)

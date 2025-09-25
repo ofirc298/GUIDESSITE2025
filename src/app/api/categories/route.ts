@@ -28,3 +28,5 @@ export const GET = withRouteLogging(async (request: NextRequest) => {
       { status: 500 }
     )
   }
+}
+)

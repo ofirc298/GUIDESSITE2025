@@ -85,3 +85,5 @@ export const POST = withRouteLogging(async (request: NextRequest) => {
       { status: 500 }
     )
   }
+}
+)
