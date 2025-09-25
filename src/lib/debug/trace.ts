@@ -146,16 +146,3 @@ export function withErrorBoundary<T extends (...args: any[]) => any>(
     }
   }) as T;
 }
-
-// Request scope detector
-export function detectRequestScope(): boolean {
-  try {
-    // Try to access headers without actually calling it
-    const headersModule = require('next/headers');
-    tracer.debug('scope-detector', 'Headers module accessible', { available: !!headersModule });
-    return true;
-  } catch (error) {
-    tracer.warn('scope-detector', 'No request scope available', { error: (error as Error).message });
-    return false;
-  }
-}

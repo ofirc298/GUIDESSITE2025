@@ -1,5 +1,5 @@
 // Safe authentication utilities that avoid NextAuth issues
-import { tracer, withErrorBoundary, detectRequestScope } from '@/lib/debug/trace';
+import { tracer, withErrorBoundary } from '@/lib/debug/trace';
 
 // Mock session for development/fallback
 interface MockSession {
@@ -46,14 +46,6 @@ class SafeAuthManager {
   // Safe session retrieval that works in any context
   async getSafeSession(): Promise<MockSession | null> {
     tracer.debug('safe-auth', 'getSafeSession called');
-    
-    const hasRequestScope = detectRequestScope();
-    tracer.info('safe-auth', 'Request scope check', { hasRequestScope });
-
-    if (!hasRequestScope) {
-      tracer.warn('safe-auth', 'No request scope - returning null session');
-      return null;
-    }
 
     try {
       // Try to get session from NextAuth if possible
