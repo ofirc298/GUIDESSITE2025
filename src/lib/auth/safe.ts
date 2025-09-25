@@ -1,6 +1,5 @@
-import { getServerSession } from 'next-auth'
-import { getAuthOptions } from './options'
-import { log } from '@/lib/log'
+import { getSafeSession } from '@/lib/auth/safe-auth'
+import { tracer } from '@/lib/debug/trace'
 
 /**
  * Returns null when called outside a valid request scope,
@@ -8,9 +7,10 @@ import { log } from '@/lib/log'
  */
 export async function safeGetServerSession() {
   try {
-    return await getServerSession(getAuthOptions())
+    tracer.debug('safe-session-legacy', 'Legacy safeGetServerSession called')
+    return await getSafeSession()
   } catch (e) {
-    log.warn('auth', 'safeGetServerSession: No request scope available or error fetching session, returning null', (e as Error)?.message)
+    tracer.warn('safe-session-legacy', 'Legacy session retrieval failed', { error: (e as Error)?.message })
     return null
   }
 }
