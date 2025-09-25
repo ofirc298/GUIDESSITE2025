@@ -3,6 +3,7 @@ import { safeGetServerSession } from '@/lib/auth/safe'
 import AuthProvider from '@/components/providers/AuthProvider'
 import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
+import { log } from '@/lib/log'
 
 // Make sure this layout never prerenders at build-time
 export const dynamic = 'force-dynamic'
@@ -10,16 +11,8 @@ export const revalidate = 0
 export const runtime = 'nodejs'
 
 export default async function SiteLayout({ children }: { children: ReactNode }) {
-  console.log('🔄 SiteLayout: Fetching session at:', new Date().toISOString())
-  
   const session = await safeGetServerSession()
-  
-  console.log('🔄 SiteLayout: Session fetched:', {
-    hasSession: !!session,
-    userId: session?.user?.id,
-    userRole: session?.user?.role,
-    timestamp: new Date().toISOString()
-  })
+  log.debug('layout', 'session', { has: !!session, role: (session as any)?.role })
 
   return (
     <AuthProvider session={session}>

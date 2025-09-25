@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { withRouteLogging } from '@/lib/api/withRouteLogging'
 
-export async function GET(request: NextRequest) {
+export const GET = withRouteLogging(async (request: NextRequest) => {
   try {
     // Get all active courses with category info and counts
     const { data: courses, error } = await supabase
@@ -50,4 +51,3 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     )
   }
-}

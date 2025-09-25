@@ -2,11 +2,12 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth/options'
 import { supabase } from '@/lib/supabase'
+import { withRouteLogging } from '@/lib/api/withRouteLogging'
 
-export async function GET(
+export const GET = withRouteLogging(async (
   request: NextRequest,
   { params }: { params: { slug: string } }
-) {
+) => {
   try {
     const session = await getServerSession(authOptions)
     const { slug } = params
@@ -80,4 +81,3 @@ export async function GET(
       { status: 500 }
     )
   }
-}

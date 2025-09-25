@@ -1,0 +1,20 @@
+import { NextRequest, NextResponse } from "next/server";
+import { log } from "@/lib/log";
+
+export function withRouteLogging(handler: (req: NextRequest) => Promise<Response>) {
+  return async (req: NextRequest) => {
+    const start = Date.now();
+    const url = req.nextUrl.pathname + req.nextUrl.search;
+    try {
+      log.info("api", `→ ${req.method} ${url}`);
+      const res = await handler(req);
+      const ms = Date.now() - start;
+      log.info("api", `← ${req.method} ${url} ${res.status} in ${ms}ms`);
+      return res;
+    } catch (e) {
+      const ms = Date.now() - start;
+      log.error("api", `✖ ${req.method} ${url} failed in ${ms}ms`, (e as Error)?.stack || e);
+      return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+    }
+  };
+}

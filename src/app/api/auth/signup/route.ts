@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 import bcrypt from 'bcryptjs'
+import { withRouteLogging } from '@/lib/api/withRouteLogging'
 
-export async function POST(request: NextRequest) {
+export const POST = withRouteLogging(async (request: NextRequest) => {
   try {
     const { name, email, password } = await request.json()
 
@@ -80,4 +81,3 @@ export async function POST(request: NextRequest) {
       { status: 500 }
     )
   }
-}
