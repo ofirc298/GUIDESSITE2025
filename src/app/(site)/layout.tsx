@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { safeGetServerSession } from '@/lib/safe-session'
+import { safeGetServerSession } from '@/lib/auth/safe'
 import AuthProvider from '@/components/providers/AuthProvider'
 import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
