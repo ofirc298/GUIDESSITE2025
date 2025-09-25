@@ -1,7 +1,5 @@
-import type { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 
-export const authOptions: NextAuthOptions = {
   debug: process.env.NODE_ENV !== 'production',
   providers: [
     CredentialsProvider({
@@ -61,14 +59,7 @@ export const authOptions: NextAuthOptions = {
 
       if (token) {
         session.user.id = token.sub!
-        session.user.role = token.role as string
-      }
-
-      return session
-    }
-  },
   pages: {
-    signIn: '/auth/signin',
-    signUp: '/auth/signup'
+    signIn: '/signin'
   }
 }

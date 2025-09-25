@@ -5,6 +5,17 @@ export const runtime = "nodejs"
 export const dynamic = "force-dynamic"
 export const revalidate = 0
 
-const handler = NextAuth(authOptions)
+// פונקציה ליצירת ה-NextAuth handler - נקראת רק כשיש בקשה בפועל
+function getAuthHandler() {
+  return NextAuth(authOptions)
+}
 
-export { handler as GET, handler as POST }
+export async function GET(req: Request, ctx: any) {
+  const handler = getAuthHandler()
+  return handler(req, ctx)
+}
+
+export async function POST(req: Request, ctx: any) {
+  const handler = getAuthHandler()
+  return handler(req, ctx)
+}
