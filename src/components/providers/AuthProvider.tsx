@@ -1,4 +1,6 @@
-import SessionProvider from './SessionProvider'
+'use client'
+
+import { SessionProvider } from 'next-auth/react'
 import { Session } from 'next-auth'
 
 interface Props {
@@ -6,7 +8,7 @@ interface Props {
   session: Session | null
 }
 
-export default function AuthSessionProvider({ children, session }: Props) {
+export default function AuthProvider({ children, session }: Props) {
   return (
     <SessionProvider session={session}>
       {children}
