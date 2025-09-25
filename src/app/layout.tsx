@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import SessionFetcher from '@/components/auth/SessionFetcher'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -16,9 +15,7 @@ export default async function RootLayout({
   return (
     <html lang="he" dir="rtl">
       <body>
-        <SessionFetcher>
-          {children}
-        </SessionFetcher>
+        {children}
       </body>
     </html>
   )
