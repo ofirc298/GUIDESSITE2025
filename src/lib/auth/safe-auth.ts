@@ -1,5 +1,4 @@
 // Safe authentication utilities that avoid NextAuth issues
-import { tracer, withErrorBoundary } from '@/lib/debug/trace';
 
 // Mock session for development/fallback
 interface MockSession {
