@@ -14,6 +14,7 @@ export default async function SiteLayout({
   children: React.ReactNode
 }) {
   const session = await getServerSession(authOptions)
+}
 import { getServerSession } from 'next-auth'
     </AuthProvider>
     <AuthProvider session={session}>
