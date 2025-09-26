@@ -14,7 +14,7 @@ export default function Header() {
   // Add logging for session state
   useEffect(() => {
     console.log('🏠 Header session state:', {
-      hasSession: !!sessionUser,
+      hasSessionUser: !!sessionUser,
       userId: sessionUser?.id,
       userEmail: sessionUser?.email,
       userRole: sessionUser?.role,

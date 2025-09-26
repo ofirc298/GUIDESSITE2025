@@ -1,22 +1,27 @@
 import type { ReactNode } from 'react'
 import { redirect } from 'next/navigation'
-import { getServerSession } from '@/lib/auth/session'
+import { cookies } from 'next/headers'
+import jwt from 'jsonwebtoken'
 import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
 
-// Make sure this layout never prerenders at build-time
+const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'your-secret-key'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+export const runtime = 'nodejs'
 
 export default async function StudentLayout({ children }: { children: ReactNode }) {
-  const session = await getServerSession()
-  
-  // Redirect if not authenticated
-  if (!session) {
-    redirect('/signin') // Use redirect from next/navigation
+  let role: string | null = null
+  try {
+    const token = cookies().get('auth-token')?.value
+    if (!token) throw 0
+    const payload = jwt.verify(token, JWT_SECRET) as any
+    role = payload.role
+  } catch {
+    redirect('/signin')
   }
-  // Redirect admins to admin panel
-  if (session.user.role === 'ADMIN' || session.user.role === 'CONTENT_MANAGER') {
+
+  if (role === 'ADMIN' || role === 'CONTENT_MANAGER') {
     redirect('/admin')
   }
 
