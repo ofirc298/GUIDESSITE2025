@@ -1,4 +1,3 @@
-```tsx
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -12,6 +11,7 @@ import {
   Edit, 
   Trash2, 
   Eye, 
+  EyeOff,
   Clock, 
   Users, 
   MoreVertical,
@@ -100,46 +100,46 @@ export default function AdminCourseDetailPage() {
   }
 
   const toggleLessonStatus = async (lessonId: string, isActive: boolean) => {
-    if (!confirm(`האם אתה בטוח שברצונך ${isActive ? 'להשבית' : 'להפעיל'} את השיעור?`)) return;
+    if (!confirm(`האם אתה בטוח שברצונך ${isActive ? 'להשבית' : 'להפעיל'} את השיעור?`)) return
 
     try {
       const response = await fetch(`/api/admin/courses/${courseId}/lessons/${lessonId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ is_active: !isActive }),
-      });
+      })
 
       if (response.ok) {
         setLessons(prev => prev.map(lesson =>
           lesson.id === lessonId ? { ...lesson, is_active: !isActive } : lesson
-        ));
+        ))
       } else {
-        alert('שגיאה בעדכון סטטוס השיעור');
+        alert('שגיאה בעדכון סטטוס השיעור')
       }
     } catch (err) {
-      console.error('Error toggling lesson status:', err);
-      alert('שגיאה בעדכון סטטוס השיעור');
+      console.error('Error toggling lesson status:', err)
+      alert('שגיאה בעדכון סטטוס השיעור')
     }
-  };
+  }
 
   const deleteLesson = async (lessonId: string) => {
-    if (!confirm('האם אתה בטוח שברצונך למחוק את השיעור?')) return;
+    if (!confirm('האם אתה בטוח שברצונך למחוק את השיעור?')) return
 
     try {
       const response = await fetch(`/api/admin/courses/${courseId}/lessons/${lessonId}`, {
         method: 'DELETE',
-      });
+      })
 
       if (response.ok) {
-        setLessons(prev => prev.filter(lesson => lesson.id !== lessonId));
+        setLessons(prev => prev.filter(lesson => lesson.id !== lessonId))
       } else {
-        alert('שגיאה במחיקת השיעור');
+        alert('שגיאה במחיקת השיעור')
       }
     } catch (err) {
-      console.error('Error deleting lesson:', err);
-      alert('שגיאה במחיקת השיעור');
+      console.error('Error deleting lesson:', err)
+      alert('שגיאה במחיקת השיעור')
     }
-  };
+  }
 
   const getLevelText = (level: string) => {
     switch (level) {
@@ -296,4 +296,3 @@ export default function AdminCourseDetailPage() {
     </div>
   )
 }
-```

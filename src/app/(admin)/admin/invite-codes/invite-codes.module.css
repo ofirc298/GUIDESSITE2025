@@ -1,4 +1,3 @@
-```css
 .container {
   min-height: 100vh;
   background: var(--gray-50);
@@ -255,4 +254,3 @@
     gap: var(--spacing-1);
   }
 }
-```

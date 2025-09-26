@@ -1,4 +1,3 @@
-```tsx
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { getAuthOptions } from '@/lib/auth/options'
@@ -80,7 +79,7 @@ export const GET = withRouteLogging(async (
       ...lesson,
       mdxSource,
       isEnrolled,
-      courseSlug: course.slug,
+      courseSlug: slug,
     })
 
   } catch (error) {
@@ -91,4 +90,3 @@ export const GET = withRouteLogging(async (
     )
   }
 })
-```

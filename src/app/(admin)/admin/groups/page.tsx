@@ -1,4 +1,3 @@
-```tsx
 'use client'
 
 import { useSession } from 'next-auth/react'
@@ -62,24 +61,24 @@ export default function GroupsManagement() {
   }
 
   const toggleGroupStatus = async (groupId: string, isActive: boolean) => {
-    if (!confirm(\`האם אתה בטוח שברצונך ${isActive ? 'להשבית' : 'להפעיל'} את הקבוצה?`)) return;
+    if (!confirm(`האם אתה בטוח שברצונך ${isActive ? 'להשבית' : 'להפעיל'} את הקבוצה?`)) return
     
     try {
       // Simulate API call
       setGroups(prev => prev.map(group =>
         group.id === groupId ? { ...group, is_active: !isActive } : group
-      ));
+      ))
     } catch (error) {
       console.error('Error toggling group status:', error)
     }
   }
 
   const deleteGroup = async (groupId: string) => {
-    if (!confirm('האם אתה בטוח שברצונך למחוק את הקבוצה?')) return;
+    if (!confirm('האם אתה בטוח שברצונך למחוק את הקבוצה?')) return
 
     try {
       // Simulate API call
-      setGroups(prev => prev.filter(group => group.id !== groupId));
+      setGroups(prev => prev.filter(group => group.id !== groupId))
     } catch (error) {
       console.error('Error deleting group:', error)
     }
@@ -174,7 +173,7 @@ export default function GroupsManagement() {
 
               <div className={styles.groupMeta}>
                 <div className={styles.statusBadge}>
-                  <span className={\`${styles.status} ${group.is_active ? styles.active : styles.inactive}`}>
+                  <span className={`${styles.status} ${group.is_active ? styles.active : styles.inactive}`}>
                     {group.is_active ? (
                       <>
                         <Eye size={14} />
@@ -226,4 +225,3 @@ export default function GroupsManagement() {
     </div>
   )
 }
-```

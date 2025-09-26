@@ -1,4 +1,3 @@
-```css
 .container {
   min-height: 100vh;
   background: var(--gray-50);
@@ -74,7 +73,7 @@
 
 .formGrid {
   display: grid;
-  grid-template-columns: 1fr; /* Changed to single column for simplicity, can be 2fr 1fr */
+  grid-template-columns: 1fr;
   gap: var(--spacing-8);
   padding: var(--spacing-6);
 }
@@ -256,4 +255,3 @@
     justify-content: center;
   }
 }
-```

@@ -1,4 +1,3 @@
-```tsx
 'use client'
 
 import { useSession } from 'next-auth/react'
@@ -38,7 +37,7 @@ export default function SystemSettings() {
   }, [session, status, router])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value, type, checked } = e.target
+    const { name, value, type, checked } = e.target as any
     setFormData(prev => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value
@@ -219,4 +218,3 @@ export default function SystemSettings() {
     </div>
   )
 }
-```

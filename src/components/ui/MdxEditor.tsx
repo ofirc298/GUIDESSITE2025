@@ -1,4 +1,3 @@
-```tsx
 import React from 'react'
 import { MessageCircle } from 'lucide-react'
 import styles from './MdxEditor.module.css'
@@ -35,10 +34,9 @@ export default function MdxEditor({
         <MessageCircle size={16} />
         <span>
           ניתן להשתמש בתחביר Markdown מלא, כולל רכיבי MDX מותאמים אישית.
-          לדוגמה: \`# כותרת`, `**טקסט מודגש**`, `[קישור](https://example.com)`.
+          לדוגמה: `# כותרת`, **טקסט מודגש**, `[קישור](https://example.com)`.
         </span>
       </div>
     </div>
   )
 }
-```

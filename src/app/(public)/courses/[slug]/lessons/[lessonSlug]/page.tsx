@@ -1,4 +1,3 @@
-```tsx
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -87,7 +86,7 @@ export default function LessonDetailPage() {
           </Link>
           <ArrowRight size={16} />
           <Link href={`/courses/${courseSlug}`} className={styles.breadcrumbLink}>
-            {courseSlug} {/* Replace with actual course title if available */}
+            {courseSlug}
           </Link>
           <ArrowRight size={16} />
           <span>{lesson.title}</span>
@@ -106,12 +105,11 @@ export default function LessonDetailPage() {
             </div>
           </div>
 
-          {/* Sidebar (e.g., Next/Prev Lesson, Course Progress) */}
+          {/* Sidebar */}
           <div className={styles.sidebar}>
             <div className={styles.sidebarCard}>
               <h3>תוכן הקורס</h3>
               <p>כאן יופיעו שיעורים נוספים בקורס</p>
-              {/* Placeholder for next/previous lesson navigation */}
               <div className={styles.navigationButtons}>
                 <button className="btn btn-secondary" disabled>שיעור קודם</button>
                 <button className="btn btn-primary" disabled>שיעור הבא</button>
@@ -123,4 +121,3 @@ export default function LessonDetailPage() {
     </div>
   )
 }
-```

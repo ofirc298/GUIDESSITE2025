@@ -1,4 +1,3 @@
-```tsx
 'use client'
 
 import { useSession } from 'next-auth/react'
@@ -68,11 +67,11 @@ export default function InviteCodesManagement() {
   }
 
   const deleteInviteCode = async (codeId: string) => {
-    if (!confirm('האם אתה בטוח שברצונך למחוק את קוד ההזמנה?')) return;
+    if (!confirm('האם אתה בטוח שברצונך למחוק את קוד ההזמנה?')) return
 
     try {
       // Simulate API call
-      setInviteCodes(prev => prev.filter(code => code.id !== codeId));
+      setInviteCodes(prev => prev.filter(code => code.id !== codeId))
     } catch (error) {
       console.error('Error deleting invite code:', error)
     }
@@ -248,4 +247,3 @@ export default function InviteCodesManagement() {
     </div>
   )
 }
-```

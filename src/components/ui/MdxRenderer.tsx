@@ -1,4 +1,3 @@
-```tsx
 import React from 'react'
 import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote'
 import styles from './MdxRenderer.module.css'
@@ -33,4 +32,3 @@ export default function MdxRenderer({ source }: MdxRendererProps) {
     </div>
   )
 }
-```

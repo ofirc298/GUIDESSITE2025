@@ -42,14 +42,6 @@ export const GET = withRouteLogging(async (request: NextRequest) => {
         lessons: course.lessons?.length || 0
       }
     })) || []
-
-    return NextResponse.json(transformedCourses)
-
-  } catch (error) {
-    console.error('Courses API error:', error)
-    return NextResponse.json(
-      { error: 'אירעה שגיאה בשרת' },
-      { status: 500 }
     )
   }
 })

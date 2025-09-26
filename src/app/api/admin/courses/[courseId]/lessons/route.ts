@@ -1,4 +1,3 @@
-```tsx
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { getAuthOptions } from '@/lib/auth/options'
@@ -117,4 +116,3 @@ export const POST = withRouteLogging(async (
     )
   }
 })
-```
