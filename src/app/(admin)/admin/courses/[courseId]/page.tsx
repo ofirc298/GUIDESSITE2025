@@ -4,20 +4,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
-import { 
-  ArrowRight, 
-  BookOpen, 
-  Plus, 
-  Edit, 
-  Trash2, 
-  Eye, 
-  EyeOff,
-  Clock, 
-  Users, 
-  MoreVertical,
-  CheckCircle,
-  Play
-} from 'lucide-react'
+import { ArrowRight, BookOpen, Plus, CreditCard as Edit, Trash2, Eye, EyeOff, Clock, Users, MoreVertical, CheckCircle, Play } from 'lucide-react'
 import styles from './course-detail-admin.module.css'
 
 interface Course {

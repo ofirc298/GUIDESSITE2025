@@ -3,7 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Users, Search, Plus, Edit, Trash2, Eye, EyeOff, MoreVertical, Calendar } from 'lucide-react'
+import { Users, Search, Plus, CreditCard as Edit, Trash2, Eye, EyeOff, MoreVertical, Calendar } from 'lucide-react'
 import styles from './groups.module.css'
 
 interface Group {
