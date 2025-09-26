@@ -1,6 +1,4 @@
 import type { ReactNode } from 'react'
-import { getServerSession } from '@/lib/auth/session'
-import { AuthProvider } from '@/hooks/useAuth'
 import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
 
@@ -9,18 +7,14 @@ export const dynamic = 'force-dynamic'
 export const revalidate = 0
 export const runtime = 'nodejs'
 
-export default async function SiteLayout({ children }: { children: ReactNode }) {
-  const session = await getServerSession()
-
+export default function SiteLayout({ children }: { children: ReactNode }) {
   return (
-    <AuthProvider>
-      <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <Header />
-        <main style={{ flex: 1 }}>
-          {children}
-        </main>
-        <Footer />
-      </div>
-    </AuthProvider>
+    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Header />
+      <main style={{ flex: 1 }}>
+        {children}
+      </main>
+      <Footer />
+    </div>
   )
 }

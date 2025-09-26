@@ -1,5 +1,7 @@
 import type { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
+import bcrypt from 'bcryptjs'
+import { getUserByEmail } from './session'
 
 export function getAuthOptions(): NextAuthOptions {
   return {
@@ -17,33 +19,20 @@ export function getAuthOptions(): NextAuthOptions {
             return null
           }
 
-          // Demo authentication - replace with real logic later
-          if (
-            credentials.email === 'demo@site.com' &&
-            credentials.password === 'demo123'
-          ) {
-            return {
-              id: '1',
-              email: 'demo@site.com',
-              name: 'Demo User',
-              role: 'STUDENT',
-            }
-          }
+          // Get user from database
+          const user = await getUserByEmail(credentials.email)
+          if (!user) return null
 
-          // Admin demo user
-          if (
-            credentials.email === 'admin@site.com' &&
-            credentials.password === 'admin123'
-          ) {
-            return {
-              id: '2',
-              email: 'admin@site.com',
-              name: 'Admin User',
-              role: 'ADMIN',
-            }
-          }
+          // Verify password
+          const isValidPassword = await bcrypt.compare(credentials.password, user.password)
+          if (!isValidPassword) return null
 
-          return null
+          return {
+            id: user.id,
+            email: user.email,
+            name: user.name,
+            role: user.role,
+          }
         }
       })
     ],

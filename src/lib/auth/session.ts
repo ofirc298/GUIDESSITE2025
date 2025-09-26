@@ -1,8 +1,10 @@
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
 import { supabase } from '@/lib/supabase'
+import { getServerSession as nextGetServerSession } from "next-auth"
+import { getAuthOptions } from './options'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key' // Use JWT_SECRET instead of NEXTAUTH_SECRET
+const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'your-secret-key'
 
 export interface SessionUser {
   id: string
@@ -14,6 +16,11 @@ export interface SessionUser {
 export interface Session {
   user: SessionUser
   expires: string
+}
+
+// NextAuth session function - only call this inside request handlers
+export async function getServerSession() {
+  return await nextGetServerSession(getAuthOptions())
 }
 
 // Create JWT token
@@ -45,10 +52,10 @@ export function verifyToken(token: string): SessionUser | null {
   }
 }
 
-// Get session from cookies (server-side)
-export async function getServerSession(): Promise<Session | null> {
+// Get session from cookies (server-side) - only call inside request handlers
+export async function getCustomSession(): Promise<Session | null> {
   try {
-    const cookieStore = cookies() // Direct call to cookies()
+    const cookieStore = cookies()
     const token = cookieStore.get('auth-token')?.value
     
     if (!token) return null
@@ -61,15 +68,15 @@ export async function getServerSession(): Promise<Session | null> {
       expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
     }
   } catch (e) {
-    console.error("Error in getServerSession:", e);
+    console.error("Error in getCustomSession:", e);
     return null
   }
 }
 
-// Set session cookie
+// Set session cookie - only call inside request handlers
 export async function setSessionCookie(user: SessionUser) {
   const token = createToken(user)
-  const cookieStore = cookies() // Direct call to cookies()
+  const cookieStore = cookies()
   
   cookieStore.set('auth-token', token, {
     httpOnly: true,
@@ -79,9 +86,9 @@ export async function setSessionCookie(user: SessionUser) {
   })
 }
 
-// Clear session cookie
+// Clear session cookie - only call inside request handlers
 export async function clearSessionCookie() {
-  const cookieStore = cookies() // Direct call to cookies()
+  const cookieStore = cookies()
   cookieStore.delete('auth-token')
 }
 

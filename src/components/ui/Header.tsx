@@ -24,7 +24,7 @@ export default function Header() {
 
   const handleSignOut = () => {
     console.log('🚪 User signing out')
-    signOut()
+    logout()
   }
 
   return (
@@ -42,7 +42,7 @@ export default function Header() {
             <Link href="/courses" className={styles.navLink}>
               קורסים
             </Link>
-            {session && (
+            {sessionUser && (
             <Link href="/my-courses" className={styles.navLink}>
               הקורסים שלי
             </Link>
