@@ -1,6 +1,5 @@
 'use client'
 
-import { useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -12,7 +11,7 @@ export default function SignInPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false) // Keep local loading state for form submission
   const router = useRouter()
   const { signIn } = useAuth()
 
@@ -22,13 +21,22 @@ export default function SignInPage() {
     setIsLoading(true)
 
     try {
-      const success = await signIn(email, password)
-      
-      if (!success) {
-        setError('אימייל או סיסמה שגויים')
+      const response = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        // Call the login function from AuthContext to update client-side state
+        signIn(data.user) // Assuming data.user contains { id, email, name, role }
+        router.push('/dashboard') // Redirect to dashboard after successful login
       } else {
-        // Redirect will be handled by the auth system
-        window.location.href = '/dashboard'
+        setError(data.error || 'אימייל או סיסמה שגויים')
+        // Clear password on failed login attempt for security
+        setPassword('');
       }
     } catch (error) {
       setError('אירעה שגיאה. נסה שוב.')

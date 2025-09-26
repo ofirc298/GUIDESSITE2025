@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import bcrypt from 'bcryptjs'
-import { getUserByEmail, setSessionCookie } from '@/lib/auth/session'
+import { getUserByEmail, setSessionCookie } from '@/lib/auth/session' // Import from new session.ts
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 
 export const POST = withRouteLogging(async (request: NextRequest) => {

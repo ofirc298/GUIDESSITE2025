@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { 
@@ -27,21 +27,21 @@ interface DashboardStats {
 }
 
 export default function AdminDashboard() {
-  const { data: session, status } = useSession()
+  const { user: sessionUser, loading: authLoading } = useAuth()
   const router = useRouter()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (status === 'loading') return
+    if (authLoading) return
 
-    if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'CONTENT_MANAGER')) {
-      router.push('/signin')
+    if (!sessionUser || (sessionUser.role !== 'ADMIN' && sessionUser.role !== 'CONTENT_MANAGER')) {
+      router.replace('/signin')
       return
     }
 
     fetchDashboardStats()
-  }, [session, status, router])
+  }, [sessionUser, authLoading, router])
 
   const fetchDashboardStats = async () => {
     try {
@@ -57,7 +57,7 @@ export default function AdminDashboard() {
     }
   }
 
-  if (status === 'loading' || isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
@@ -66,7 +66,7 @@ export default function AdminDashboard() {
     )
   }
 
-  if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'CONTENT_MANAGER')) {
+  if (!sessionUser || (sessionUser.role !== 'ADMIN' && sessionUser.role !== 'CONTENT_MANAGER')) {
     return null
   }
 
@@ -76,11 +76,11 @@ export default function AdminDashboard() {
         <div className={styles.header}>
           <div>
             <h1>פאנל ניהול</h1>
-            <p>ברוך הבא, {session.user.name || session.user.email}</p>
+            <p>ברוך הבא, {sessionUser.name || sessionUser.email}</p>
           </div>
           <div className={styles.userBadge}>
             <span className={styles.role}>
-              {session.user.role === 'ADMIN' ? 'מנהל מערכת' : 'מנהל תוכן'}
+              {sessionUser.role === 'ADMIN' ? 'מנהל מערכת' : 'מנהל תוכן'}
             </span>
           </div>
         </div>
@@ -228,7 +228,7 @@ export default function AdminDashboard() {
               <p>צור ונהל קודי הזמנה</p>
             </a>
 
-            {session.user.role === 'ADMIN' && (
+            {sessionUser.role === 'ADMIN' && (
               <>
                 <a href="/admin/payments" className={styles.actionCard}>
                   <DollarSign size={32} />

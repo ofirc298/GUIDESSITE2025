@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth/session'
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase' // Ensure supabase is imported
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 
 export const GET = withRouteLogging(async (request: NextRequest) => {
@@ -38,5 +38,4 @@ export const GET = withRouteLogging(async (request: NextRequest) => {
       { status: 500 }
     )
   }
-}
-)
+})

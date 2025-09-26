@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
@@ -62,7 +62,7 @@ interface DashboardData {
 }
 
 export default function StudentDashboard() {
-  const { data: session, status } = useSession()
+  const { user: sessionUser, loading: authLoading } = useAuth()
   const router = useRouter()
   const [dashboardData, setDashboardData] = useState<DashboardData | null>(null)
   const [isLoading, setIsLoading] = useState(true)
@@ -70,13 +70,13 @@ export default function StudentDashboard() {
   useEffect(() => {
     if (status === 'loading') return
 
-    if (!session) {
+    if (!authLoading && !sessionUser) {
       router.push('/signin')
       return
     }
 
-    if (session.user.role === 'ADMIN' || session.user.role === 'CONTENT_MANAGER') {
-      router.push('/admin')
+    if (sessionUser && (sessionUser.role === 'ADMIN' || sessionUser.role === 'CONTENT_MANAGER')) {
+      router.replace('/admin') // Use replace to avoid back button issues
       return
     }
 
@@ -123,7 +123,7 @@ export default function StudentDashboard() {
     })
   }
 
-  if (status === 'loading' || isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
@@ -131,8 +131,8 @@ export default function StudentDashboard() {
       </div>
     )
   }
-
-  if (!session) {
+  
+  if (!sessionUser) {
     return null
   }
 
@@ -142,7 +142,7 @@ export default function StudentDashboard() {
         {/* Welcome Header */}
         <div className={styles.welcomeHeader}>
           <div>
-            <h1>שלום, {session.user.name || 'סטודנט'}! 👋</h1>
+            <h1>שלום, {sessionUser.name || 'סטודנט'}! 👋</h1>
             <p>ברוך הבא חזרה למסע הלמידה שלך</p>
           </div>
           <div className={styles.quickActions}>

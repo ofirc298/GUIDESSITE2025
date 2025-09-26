@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth/session'
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase' // Ensure supabase is imported
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 import { serialize } from 'next-mdx-remote/serialize'
 

@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import { useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
 import { ArrowRight, BookOpen, Plus, CreditCard as Edit, Trash2, Eye, EyeOff, Clock, Users, MoreVertical, CheckCircle, Play } from 'lucide-react'
 import styles from './course-detail-admin.module.css'
@@ -35,7 +35,7 @@ interface Lesson {
 export default function AdminCourseDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const { data: session, status } = useSession()
+  const { user: sessionUser, loading: authLoading } = useAuth()
   const [course, setCourse] = useState<Course | null>(null)
   const [lessons, setLessons] = useState<Lesson[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -45,8 +45,8 @@ export default function AdminCourseDetailPage() {
 
   useEffect(() => {
     if (status === 'loading') return
-
-    if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'CONTENT_MANAGER')) {
+    
+    if (!authLoading && (!sessionUser || (sessionUser.role !== 'ADMIN' && sessionUser.role !== 'CONTENT_MANAGER'))) {
       router.push('/signin')
       return
     }
@@ -146,7 +146,7 @@ export default function AdminCourseDetailPage() {
     }
   }
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
@@ -154,8 +154,8 @@ export default function AdminCourseDetailPage() {
       </div>
     )
   }
-
-  if (error || !course) {
+  
+  if (error || !course || !sessionUser) {
     return (
       <div className={styles.error}>
         <h1>שגיאה</h1>

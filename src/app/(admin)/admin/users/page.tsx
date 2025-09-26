@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Users, Search, Filter, CreditCard as Edit, Trash2, UserPlus, Shield, Mail, Calendar, MoreVertical } from 'lucide-react'
@@ -20,7 +20,7 @@ interface User {
 }
 
 export default function UsersManagement() {
-  const { data: session, status } = useSession()
+  const { user: sessionUser, loading: authLoading } = useAuth()
   const router = useRouter()
   const [users, setUsers] = useState<User[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -29,8 +29,8 @@ export default function UsersManagement() {
 
   useEffect(() => {
     if (status === 'loading') return
-
-    if (!session || session.user.role !== 'ADMIN') {
+    
+    if (!authLoading && (!sessionUser || sessionUser.role !== 'ADMIN')) {
       router.push('/signin')
       return
     }
@@ -114,7 +114,7 @@ export default function UsersManagement() {
     return matchesSearch && matchesRole
   })
 
-  if (status === 'loading' || isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
@@ -122,8 +122,8 @@ export default function UsersManagement() {
       </div>
     )
   }
-
-  if (!session || session.user.role !== 'ADMIN') {
+  
+  if (!sessionUser || sessionUser.role !== 'ADMIN') {
     return null
   }
 

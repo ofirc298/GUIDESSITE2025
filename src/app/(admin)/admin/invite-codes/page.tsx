@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Gift, Search, Plus, CreditCard as Edit, Trash2, User, Mail, Calendar, Clock } from 'lucide-react'
@@ -20,7 +20,7 @@ interface InviteCode {
 }
 
 export default function InviteCodesManagement() {
-  const { data: session, status } = useSession()
+  const { user: sessionUser, loading: authLoading } = useAuth()
   const router = useRouter()
   const [inviteCodes, setInviteCodes] = useState<InviteCode[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -29,8 +29,8 @@ export default function InviteCodesManagement() {
 
   useEffect(() => {
     if (status === 'loading') return
-
-    if (!session || session.user.role !== 'ADMIN') {
+    
+    if (!authLoading && (!sessionUser || sessionUser.role !== 'ADMIN')) {
       router.push('/signin')
       return
     }
@@ -102,7 +102,7 @@ export default function InviteCodesManagement() {
     return matchesSearch && matchesStatus
   })
 
-  if (status === 'loading' || isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
@@ -110,8 +110,8 @@ export default function InviteCodesManagement() {
       </div>
     )
   }
-
-  if (!session || session.user.role !== 'ADMIN') {
+  
+  if (!sessionUser || sessionUser.role !== 'ADMIN') {
     return null
   }
 

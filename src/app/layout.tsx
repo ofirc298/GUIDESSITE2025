@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import Providers from './providers'
 
 // Make sure this layout never prerenders at build-time
 export const dynamic = 'force-dynamic'
@@ -20,7 +21,9 @@ export default function RootLayout({
   return (
     <html lang="he" dir="rtl">
       <body>
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   )

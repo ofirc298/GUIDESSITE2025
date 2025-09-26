@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
 import bcrypt from 'bcryptjs'
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useAuth } from '@/hooks/useAuth'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowRight, BookOpen, Lock, Play } from 'lucide-react'
@@ -20,18 +21,20 @@ interface Lesson {
   isEnrolled: boolean
   courseSlug: string
 }
-
+ 
 export default function LessonDetailPage() {
   const params = useParams()
   const router = useRouter()
   const [lesson, setLesson] = useState<Lesson | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState('')
+  const { loading: authLoading } = useAuth() // Use authLoading to wait for session
 
   const courseSlug = params.slug as string
   const lessonSlug = params.lessonSlug as string
 
   useEffect(() => {
+    if (authLoading) return; // Wait for auth to load
     if (courseSlug && lessonSlug) {
       fetchLesson()
     }
@@ -55,7 +58,7 @@ export default function LessonDetailPage() {
     }
   }
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>

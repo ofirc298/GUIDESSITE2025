@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
@@ -39,7 +39,7 @@ interface EnrolledCourse {
 }
 
 export default function MyCourses() {
-  const { data: session, status } = useSession()
+  const { user: sessionUser, loading: authLoading } = useAuth()
   const router = useRouter()
   const [courses, setCourses] = useState<EnrolledCourse[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -49,13 +49,13 @@ export default function MyCourses() {
 
   useEffect(() => {
     if (status === 'loading') return
-
-    if (!session) {
+    
+    if (!authLoading && !sessionUser) {
       router.push('/signin')
       return
     }
 
-    if (session.user.role === 'ADMIN' || session.user.role === 'CONTENT_MANAGER') {
+    if (sessionUser && (sessionUser.role === 'ADMIN' || sessionUser.role === 'CONTENT_MANAGER')) {
       router.push('/admin')
       return
     }
@@ -142,7 +142,7 @@ export default function MyCourses() {
       }
     })
 
-  if (status === 'loading' || isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
@@ -150,8 +150,8 @@ export default function MyCourses() {
       </div>
     )
   }
-
-  if (!session) {
+  
+  if (!sessionUser) {
     return null
   }
 

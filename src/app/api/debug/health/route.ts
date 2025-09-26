@@ -1,7 +1,6 @@
 // Health check endpoint with comprehensive diagnostics
 import { NextRequest, NextResponse } from 'next/server';
 import { withRouteLogging } from '@/lib/api/withRouteLogging';
-import { tracer } from '@/lib/debug/trace';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -14,7 +13,6 @@ export const GET = withRouteLogging(async (request: NextRequest) => {
     timestamp: new Date().toISOString(),
     status: 'healthy',
     checks: {
-      requestScope: false,
       nextHeaders: false,
       nextCookies: false,
       environment: process.env.NODE_ENV,
@@ -25,15 +23,6 @@ export const GET = withRouteLogging(async (request: NextRequest) => {
     },
     errors: [] as string[]
   };
-
-  // Test request scope
-  try {
-    diagnostics.checks.requestScope = detectRequestScope();
-    tracer.info('health-check', 'Request scope check', { available: diagnostics.checks.requestScope });
-  } catch (error) {
-    diagnostics.errors.push(`Request scope: ${(error as Error).message}`);
-    tracer.error('health-check', 'Request scope check failed', { error: (error as Error).message });
-  }
 
   // Test headers access
   try {

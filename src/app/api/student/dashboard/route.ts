@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth/session'
-import { supabase } from '@/lib/supabase'
+import { supabase } from '@/lib/supabase' // Ensure supabase is imported
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 
 export const GET = withRouteLogging(async (request: NextRequest) => {
@@ -102,9 +102,8 @@ export const GET = withRouteLogging(async (request: NextRequest) => {
   } catch (error) {
     console.error('Dashboard API error:', error)
     return NextResponse.json(
-      { error: 'אירעה שגיאה בטעינת הנתונים' },
+      { error: 'אירעה שגיאה בשרת' },
       { status: 500 }
     )
   }
-}
-)
+})

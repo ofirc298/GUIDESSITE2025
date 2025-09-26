@@ -1,21 +1,21 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { BarChart, LineChart, PieChart, TrendingUp, Users, BookOpen, DollarSign } from 'lucide-react'
 import styles from './analytics.module.css'
 
 export default function AnalyticsDashboard() {
-  const { data: session, status } = useSession()
+  const { user: sessionUser, loading: authLoading } = useAuth()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     if (status === 'loading') return
 
-    if (!session || session.user.role !== 'ADMIN') {
-      router.push('/signin')
+    if (!authLoading && (!sessionUser || sessionUser.role !== 'ADMIN')) {
+      router.replace('/signin') // Use replace to avoid back button issues
       return
     }
 
@@ -25,7 +25,7 @@ export default function AnalyticsDashboard() {
     }, 1000)
   }, [session, status, router])
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
@@ -33,8 +33,8 @@ export default function AnalyticsDashboard() {
       </div>
     )
   }
-
-  if (!session || session.user.role !== 'ADMIN') {
+  
+  if (!sessionUser || sessionUser.role !== 'ADMIN') {
     return null
   }
 

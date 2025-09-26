@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { useAuth } from '@/hooks/useAuth'
 import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowRight, Save, BookOpen, AlertCircle, CheckCircle, Play } from 'lucide-react'
@@ -11,6 +12,7 @@ export default function NewLessonPage() {
   const router = useRouter()
   const params = useParams()
   const courseId = params.courseId as string
+  const { user: sessionUser, loading: authLoading } = useAuth()
 
   const [formData, setFormData] = useState({
     title: '',
@@ -24,6 +26,13 @@ export default function NewLessonPage() {
   const [courseTitle, setCourseTitle] = useState('')
 
   useEffect(() => {
+    if (!authLoading && (!sessionUser || (sessionUser.role !== 'ADMIN' && sessionUser.role !== 'CONTENT_MANAGER'))) {
+      router.replace('/signin')
+      return
+    }
+    if (authLoading) {
+      return; // Wait for auth to load
+    }
     if (courseId) {
       fetchCourseTitle()
     }
@@ -89,6 +98,15 @@ export default function NewLessonPage() {
     } finally {
       setIsLoading(false)
     }
+  }
+
+  if (authLoading) {
+    return (
+      <div className={styles.loading}>
+        <div className={styles.spinner}></div>
+        <p>טוען...</p>
+      </div>
+    )
   }
 
   return (

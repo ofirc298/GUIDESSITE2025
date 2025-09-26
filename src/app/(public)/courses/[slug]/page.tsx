@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import { useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
 import { 
   BookOpen, 
@@ -53,7 +53,7 @@ interface Course {
 export default function CourseDetailPage() {
   const params = useParams()
   const router = useRouter()
-  const { data: session } = useSession()
+  const { user: sessionUser, loading: authLoading } = useAuth()
   const [course, setCourse] = useState<Course | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isEnrolling, setIsEnrolling] = useState(false)
@@ -61,7 +61,7 @@ export default function CourseDetailPage() {
 
   useEffect(() => {
     if (params.slug) {
-      fetchCourse(params.slug as string)
+      fetchCourse(params.slug as string) // Re-fetch when session changes to update enrollment status
     }
   }, [params.slug, session])
 
@@ -83,7 +83,7 @@ export default function CourseDetailPage() {
   }
 
   const handleEnroll = async () => {
-    if (!session) {
+    if (!sessionUser) {
       router.push('/signin')
       return
     }
@@ -132,7 +132,7 @@ export default function CourseDetailPage() {
     }
   }
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
@@ -295,7 +295,7 @@ export default function CourseDetailPage() {
                 </div>
               )}
 
-              {course.isEnrolled ? (
+              {course.isEnrolled && sessionUser ? ( // Only show enrolled section if actually enrolled and logged in
                 <div className={styles.enrolledSection}>
                   <div className={styles.enrolledBadge}>
                     <CheckCircle size={16} />
@@ -307,7 +307,7 @@ export default function CourseDetailPage() {
                   </button>
                 </div>
               ) : (
-                <div className={styles.enrollSection}>
+                <div className={styles.enrollSection}> {/* Show enroll section if not enrolled or not logged in */}
                   {!session ? (
                     <div className={styles.loginPrompt}>
                       <User size={16} />

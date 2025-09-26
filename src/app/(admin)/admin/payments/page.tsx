@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { DollarSign, Search, Filter, Calendar, User, BookOpen } from 'lucide-react'
@@ -20,7 +20,7 @@ interface Payment {
 }
 
 export default function PaymentsManagement() {
-  const { data: session, status } = useSession()
+  const { user: sessionUser, loading: authLoading } = useAuth()
   const router = useRouter()
   const [payments, setPayments] = useState<Payment[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -29,8 +29,8 @@ export default function PaymentsManagement() {
 
   useEffect(() => {
     if (status === 'loading') return
-
-    if (!session || session.user.role !== 'ADMIN') {
+    
+    if (!authLoading && (!sessionUser || sessionUser.role !== 'ADMIN')) {
       router.push('/signin')
       return
     }
@@ -107,7 +107,7 @@ export default function PaymentsManagement() {
     return matchesSearch && matchesStatus
   })
 
-  if (status === 'loading' || isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
@@ -115,8 +115,8 @@ export default function PaymentsManagement() {
       </div>
     )
   }
-
-  if (!session || session.user.role !== 'ADMIN') {
+  
+  if (!sessionUser || sessionUser.role !== 'ADMIN') {
     return null
   }
 

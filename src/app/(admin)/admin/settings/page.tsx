@@ -1,13 +1,13 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Settings, Globe, Mail, Key, Save, AlertCircle, CheckCircle } from 'lucide-react'
 import styles from './settings.module.css'
 
 export default function SystemSettings() {
-  const { data: session, status } = useSession()
+  const { user: sessionUser, loading: authLoading } = useAuth()
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -25,8 +25,8 @@ export default function SystemSettings() {
   useEffect(() => {
     if (status === 'loading') return
 
-    if (!session || session.user.role !== 'ADMIN') {
-      router.push('/signin')
+    if (!authLoading && (!sessionUser || sessionUser.role !== 'ADMIN')) {
+      router.replace('/signin') // Use replace to avoid back button issues
       return
     }
 
@@ -65,7 +65,7 @@ export default function SystemSettings() {
     }
   }
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className={styles.loading}>
         <div className={styles.spinner}></div>
@@ -73,8 +73,8 @@ export default function SystemSettings() {
       </div>
     )
   }
-
-  if (!session || session.user.role !== 'ADMIN') {
+  
+  if (!sessionUser || sessionUser.role !== 'ADMIN') {
     return null
   }
 

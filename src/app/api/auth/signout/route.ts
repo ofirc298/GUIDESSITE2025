@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { clearSessionCookie } from '@/lib/auth/session'
+import { clearSessionCookie } from '@/lib/auth/session' // Import from new session.ts
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 
 export const POST = withRouteLogging(async (request: NextRequest) => {

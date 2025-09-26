@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSession, useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
 import { BookOpen, Menu, X, User, Settings, LogOut } from 'lucide-react'
 import styles from './Header.module.css'
@@ -9,20 +9,18 @@ import styles from './Header.module.css'
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
-  
-  const { data: session } = useSession()
-  const { signOut } = useAuth()
+  const { user: sessionUser, logout, loading } = useAuth()
 
   // Add logging for session state
   useEffect(() => {
     console.log('🏠 Header session state:', {
-      hasSession: !!session,
-      userId: session?.user?.id,
-      userEmail: session?.user?.email,
-      userRole: session?.user?.role,
+      hasSession: !!sessionUser,
+      userId: sessionUser?.id,
+      userEmail: sessionUser?.email,
+      userRole: sessionUser?.role,
       timestamp: new Date().toISOString()
-    })
-  }, [session])
+    });
+  }, [sessionUser]);
 
   const handleSignOut = () => {
     console.log('🚪 User signing out')
@@ -45,22 +43,22 @@ export default function Header() {
               קורסים
             </Link>
             {session && (
-              <Link href="/my-courses" className={styles.navLink}>
-                הקורסים שלי
-              </Link>
-            )}
+            <Link href="/my-courses" className={styles.navLink}>
+              הקורסים שלי
+            </Link>
+          )}
           </nav>
 
           {/* User Section */}
           <div className={styles.userSection}>
-            {session ? (
+            {loading ? (<div>טוען...</div>) : sessionUser ? (
               <div className={styles.userMenu}>
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
                   className={styles.userButton}
                 >
                   <User size={20} />
-                  <span>{session.user.name || session.user.email}</span>
+                  <span>{sessionUser.name || sessionUser.email}</span>
                 </button>
                 
                 {isUserMenuOpen && (
@@ -69,7 +67,7 @@ export default function Header() {
                       <User size={16} />
                       דשבורד
                     </Link>
-                    {(session.user.role === 'ADMIN' || session.user.role === 'CONTENT_MANAGER') && (
+                    {(sessionUser.role === 'ADMIN' || sessionUser.role === 'CONTENT_MANAGER') && (
                       <Link href="/admin" className={styles.dropdownItem}>
                         <Settings size={16} />
                         פאנל ניהול
@@ -109,12 +107,12 @@ export default function Header() {
             <Link href="/courses" className={styles.mobileNavLink}>
               קורסים
             </Link>
-            {session && (
+            {sessionUser && (
               <Link href="/my-courses" className={styles.mobileNavLink}>
                 הקורסים שלי
               </Link>
             )}
-            {!session && (
+            {!sessionUser && (
               <>
                 <Link href="/signin" className={styles.mobileNavLink}>
                   התחבר
