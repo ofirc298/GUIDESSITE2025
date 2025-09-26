@@ -42,6 +42,13 @@ export const GET = withRouteLogging(async (request: NextRequest) => {
         lessons: course.lessons?.length || 0
       }
     })) || []
+
+    return NextResponse.json(transformedCourses)
+  } catch (error) {
+    console.error('Get courses error:', error)
+    return NextResponse.json(
+      { error: 'אירעה שגיאה בשרת' },
+      { status: 500 }
     )
   }
 })
@@ -117,5 +124,4 @@ export const POST = withRouteLogging(async (request: NextRequest) => {
       { status: 500 }
     )
   }
-}
-)
+})
