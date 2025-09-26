@@ -21,7 +21,7 @@ export const GET = withRouteLogging(async (request: NextRequest) => {
       .select(`
         *,
         category:categories(name),
-        enrollments(count),
+        enrollments(id),
         lessons(count)
       `)
       .order('created_at', { ascending: false })
@@ -38,7 +38,7 @@ export const GET = withRouteLogging(async (request: NextRequest) => {
     const transformedCourses = courses?.map(course => ({
       ...course,
       _count: {
-        enrollments: course.enrollments?.length || 0,
+        enrollments: course.enrollments?.length || 0, // Count enrollments
         lessons: course.lessons?.length || 0
       }
     })) || []

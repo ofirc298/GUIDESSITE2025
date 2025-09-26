@@ -204,6 +204,18 @@ export default function AdminDashboard() {
               <p>דוחות ונתונים מפורטים</p>
             </a>
 
+            <a href="/admin/groups" className={styles.actionCard}>
+              <Users size={32} />
+              <h3>ניהול קבוצות</h3>
+              <p>נהל קבוצות משתמשים</p>
+            </a>
+
+            <a href="/admin/invite-codes" className={styles.actionCard}>
+              <Award size={32} />
+              <h3>קודי הזמנה</h3>
+              <p>צור ונהל קודי הזמנה</p>
+            </a>
+
             {session.user.role === 'ADMIN' && (
               <>
                 <a href="/admin/payments" className={styles.actionCard}>
@@ -211,7 +223,6 @@ export default function AdminDashboard() {
                   <h3>ניהול תשלומים</h3>
                   <p>עקוב אחרי תשלומים והכנסות</p>
                 </a>
-
                 <a href="/admin/settings" className={styles.actionCard}>
                   <Award size={32} />
                   <h3>הגדרות מערכת</h3>
@@ -219,6 +230,9 @@ export default function AdminDashboard() {
                 </a>
               </>
             )}
+
+            {/* Placeholder for other admin actions */}
+            {/* <a href="/admin/reports" className={styles.actionCard}>...</a> */}
           </div>
         </div>
       </div>

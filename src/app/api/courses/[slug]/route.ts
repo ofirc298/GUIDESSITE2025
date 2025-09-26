@@ -18,7 +18,7 @@ export const GET = withRouteLogging(async (
       .select(`
         *,
         category:categories(name),
-        lessons(id, title, slug, "order"),
+        lessons(id, title, slug, "order", is_active),
         enrollments(count),
         ratings(rating)
       `)
@@ -72,7 +72,7 @@ export const GET = withRouteLogging(async (
       enrollment
     }
 
-    return NextResponse.json(transformedCourse)
+    return NextResponse.json(transformedCourse) // Return the transformed course data
 
   } catch (error) {
     console.error('Course detail API error:', error)

@@ -1,0 +1,53 @@
+```css
+.mdxEditorContainer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.label {
+  font-weight: 500;
+  color: var(--gray-700);
+  font-size: var(--font-size-sm);
+}
+
+.textarea {
+  width: 100%;
+  padding: var(--spacing-3);
+  border: 1px solid var(--gray-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+  transition: all 0.2s ease;
+  background: white;
+  resize: vertical;
+}
+
+.textarea:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgb(59 130 246 / 0.1);
+}
+
+.textarea:disabled {
+  background: var(--gray-50);
+  cursor: not-allowed;
+}
+
+.hint {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  color: var(--gray-500);
+  font-size: var(--font-size-xs);
+  background: var(--gray-50);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-3);
+  border: 1px solid var(--gray-200);
+}
+
+.hint svg {
+  color: var(--primary-500);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+```
