@@ -62,7 +62,7 @@ export default function GroupsManagement() {
   }
 
   const toggleGroupStatus = async (groupId: string, isActive: boolean) => {
-    if (!confirm(`האם אתה בטוח שברצונך ${isActive ? 'להשבית' : 'להפעיל'} את הקבוצה?`)) return;
+    if (!confirm(\`האם אתה בטוח שברצונך ${isActive ? 'להשבית' : 'להפעיל'} את הקבוצה?`)) return;
     
     try {
       // Simulate API call
@@ -174,7 +174,7 @@ export default function GroupsManagement() {
 
               <div className={styles.groupMeta}>
                 <div className={styles.statusBadge}>
-                  <span className={`${styles.status} ${group.is_active ? styles.active : styles.inactive}`}>
+                  <span className={\`${styles.status} ${group.is_active ? styles.active : styles.inactive}`}>
                     {group.is_active ? (
                       <>
                         <Eye size={14} />
