@@ -4,19 +4,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { 
-  BookOpen, 
-  Plus, 
-  Search, 
-  Filter,
-  Edit,
-  Trash2,
-  Eye,
-  Users,
-  Clock,
-  Star,
-  MoreVertical
-} from 'lucide-react'
+import { BookOpen, Plus, Search, Filter, CreditCard as Edit, Trash2, Eye, Users, Clock, Star, MoreVertical } from 'lucide-react'
 import styles from './courses.module.css'
 
 interface Course {
