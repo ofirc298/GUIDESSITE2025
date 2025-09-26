@@ -3,17 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { 
-  FolderOpen, 
-  Plus, 
-  Search, 
-  Edit,
-  Trash2,
-  Eye,
-  EyeOff,
-  MoreVertical,
-  BookOpen
-} from 'lucide-react'
+import { FolderOpen, Plus, Search, CreditCard as Edit, Trash2, Eye, EyeOff, MoreVertical, BookOpen } from 'lucide-react'
 import styles from './categories.module.css'
 
 interface Category {

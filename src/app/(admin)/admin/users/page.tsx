@@ -3,18 +3,7 @@
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { 
-  Users, 
-  Search, 
-  Filter,
-  Edit,
-  Trash2,
-  UserPlus,
-  Shield,
-  Mail,
-  Calendar,
-  MoreVertical
-} from 'lucide-react'
+import { Users, Search, Filter, CreditCard as Edit, Trash2, UserPlus, Shield, Mail, Calendar, MoreVertical } from 'lucide-react'
 import styles from './users.module.css'
 
 interface User {
