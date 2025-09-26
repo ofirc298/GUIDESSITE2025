@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { redirect } from 'next/navigation'
-import { safeGetServerSession } from '@/lib/auth/safe'
-import AuthProvider from '@/components/providers/AuthProvider'
+import { getServerSession } from '@/lib/auth/session'
+import { AuthProvider } from '@/hooks/useAuth'
 import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
 
@@ -11,7 +11,7 @@ export const revalidate = 0
 export const runtime = 'nodejs'
 
 export default async function StudentLayout({ children }: { children: ReactNode }) {
-  const session = await safeGetServerSession()
+  const session = await getServerSession()
   
   // Redirect if not authenticated
   if (!session) {
@@ -24,7 +24,7 @@ export default async function StudentLayout({ children }: { children: ReactNode 
   }
 
   return (
-    <AuthProvider session={session}>
+    <AuthProvider>
       <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Header />
         <main style={{ flex: 1 }}>

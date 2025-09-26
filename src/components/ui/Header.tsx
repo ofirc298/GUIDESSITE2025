@@ -1,9 +1,7 @@
 'use client'
 
-'use client'
-
 import { useState, useEffect } from 'react'
-import { useSession, signOut } from 'next-auth/react'
+import { useSession, useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
 import { BookOpen, Menu, X, User, Settings, LogOut } from 'lucide-react'
 import styles from './Header.module.css'
@@ -13,6 +11,7 @@ export default function Header() {
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
   
   const { data: session } = useSession()
+  const { signOut } = useAuth()
 
   // Add logging for session state
   useEffect(() => {
@@ -27,7 +26,7 @@ export default function Header() {
 
   const handleSignOut = () => {
     console.log('🚪 User signing out')
-    signOut({ callbackUrl: '/' })
+    signOut()
   }
 
   return (

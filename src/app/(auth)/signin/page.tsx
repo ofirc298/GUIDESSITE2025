@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { signIn, getSession } from 'next-auth/react'
+import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { BookOpen, Mail, Lock, Eye, EyeOff, AlertCircle } from 'lucide-react'
@@ -14,6 +14,7 @@ export default function SignInPage() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const { signIn } = useAuth()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -21,22 +22,13 @@ export default function SignInPage() {
     setIsLoading(true)
 
     try {
-      const result = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      })
-
-      if (result?.error) {
+      const success = await signIn(email, password)
+      
+      if (!success) {
         setError('אימייל או סיסמה שגויים')
       } else {
-        // Get the updated session to check user role
-        const session = await getSession()
-        if (session?.user?.role === 'ADMIN' || session?.user?.role === 'CONTENT_MANAGER') {
-          router.push('/admin')
-        } else {
-          router.push('/dashboard')
-        }
+        // Redirect will be handled by the auth system
+        window.location.href = '/dashboard'
       }
     } catch (error) {
       setError('אירעה שגיאה. נסה שוב.')

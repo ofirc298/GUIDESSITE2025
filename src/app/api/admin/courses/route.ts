@@ -1,12 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { getAuthOptions } from '@/lib/auth/options'
+import { getServerSession } from '@/lib/auth/session'
 import { supabase } from '@/lib/supabase'
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 
 export const GET = withRouteLogging(async (request: NextRequest) => {
   try {
-    const session = await getServerSession(getAuthOptions())
+    const session = await getServerSession()
 
     if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'CONTENT_MANAGER')) {
       return NextResponse.json(
@@ -55,7 +54,7 @@ export const GET = withRouteLogging(async (request: NextRequest) => {
 
 export const POST = withRouteLogging(async (request: NextRequest) => {
   try {
-    const session = await getServerSession(getAuthOptions())
+    const session = await getServerSession()
 
     if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'CONTENT_MANAGER')) {
       return NextResponse.json(

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { getAuthOptions } from '@/lib/auth/options'
+import { getServerSession } from '@/lib/auth/session'
 import { supabase } from '@/lib/supabase'
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 import { serialize } from 'next-mdx-remote/serialize'
@@ -10,7 +9,7 @@ export const GET = withRouteLogging(async (
   { params }: { params: { slug: string; lessonSlug: string } }
 ) => {
   try {
-    const session = await getServerSession(getAuthOptions())
+    const session = await getServerSession()
     const { slug, lessonSlug } = params
 
     // First, get the course to ensure it exists and is active

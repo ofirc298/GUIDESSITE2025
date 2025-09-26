@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { getAuthOptions } from '@/lib/auth/options'
+import { getServerSession } from '@/lib/auth/session'
 import { supabase } from '@/lib/supabase'
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 
@@ -9,7 +8,7 @@ export const GET = withRouteLogging(async (
   { params }: { params: { slug: string } }
 ) => {
   try {
-    const session = await getServerSession(getAuthOptions())
+    const session = await getServerSession()
     const { slug } = params
 
     // Get course with all related data
