@@ -23,9 +23,9 @@ export default function SystemSettings() {
   })
 
   useEffect(() => {
-    if (status === 'loading') return
+    if (authLoading) return
 
-    if (!authLoading && (!sessionUser || sessionUser.role !== 'ADMIN')) {
+    if (!sessionUser || sessionUser.role !== 'ADMIN') {
       router.replace('/signin') // Use replace to avoid back button issues
       return
     }
@@ -34,7 +34,7 @@ export default function SystemSettings() {
     setTimeout(() => {
       setIsLoading(false)
     }, 1000)
-  }, [session, status, router])
+  }, [sessionUser, authLoading, router])
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value, type, checked } = e.target as any

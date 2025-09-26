@@ -28,15 +28,15 @@ export default function UsersManagement() {
   const [filterRole, setFilterRole] = useState('')
 
   useEffect(() => {
-    if (status === 'loading') return
+    if (authLoading) return
     
-    if (!authLoading && (!sessionUser || sessionUser.role !== 'ADMIN')) {
+    if (!sessionUser || sessionUser.role !== 'ADMIN') {
       router.push('/signin')
       return
     }
 
     fetchUsers()
-  }, [session, status, router])
+  }, [sessionUser, authLoading, router])
 
   const fetchUsers = async () => {
     try {

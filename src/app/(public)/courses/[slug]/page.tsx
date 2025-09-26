@@ -61,9 +61,9 @@ export default function CourseDetailPage() {
 
   useEffect(() => {
     if (params.slug) {
-      fetchCourse(params.slug as string) // Re-fetch when session changes to update enrollment status
+      fetchCourse(params.slug as string) // Re-fetch when sessionUser changes to update enrollment status
     }
-  }, [params.slug, session])
+  }, [params.slug, sessionUser])
 
   const fetchCourse = async (slug: string) => {
     try {
@@ -295,7 +295,7 @@ export default function CourseDetailPage() {
                 </div>
               )}
 
-              {course.isEnrolled && sessionUser ? ( // Only show enrolled section if actually enrolled and logged in
+              {course.isEnrolled && sessionUser ? (
                 <div className={styles.enrolledSection}>
                   <div className={styles.enrolledBadge}>
                     <CheckCircle size={16} />
@@ -307,8 +307,8 @@ export default function CourseDetailPage() {
                   </button>
                 </div>
               ) : (
-                <div className={styles.enrollSection}> {/* Show enroll section if not enrolled or not logged in */}
-                  {!session ? (
+                <div className={styles.enrollSection}>
+                  {!sessionUser ? (
                     <div className={styles.loginPrompt}>
                       <User size={16} />
                       <span>התחבר כדי להירשם לקורס</span>

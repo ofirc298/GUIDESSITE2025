@@ -44,9 +44,9 @@ export default function AdminCourseDetailPage() {
   const courseId = params.courseId as string
 
   useEffect(() => {
-    if (status === 'loading') return
+    if (authLoading) return
     
-    if (!authLoading && (!sessionUser || (sessionUser.role !== 'ADMIN' && sessionUser.role !== 'CONTENT_MANAGER'))) {
+    if (!sessionUser || (sessionUser.role !== 'ADMIN' && sessionUser.role !== 'CONTENT_MANAGER')) {
       router.push('/signin')
       return
     }
@@ -55,7 +55,7 @@ export default function AdminCourseDetailPage() {
       fetchCourseDetails()
       fetchLessons()
     }
-  }, [courseId, session, status, router])
+  }, [courseId, sessionUser, authLoading, router])
 
   const fetchCourseDetails = async () => {
     try {

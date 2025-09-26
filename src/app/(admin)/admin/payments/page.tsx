@@ -28,15 +28,15 @@ export default function PaymentsManagement() {
   const [filterStatus, setFilterStatus] = useState('')
 
   useEffect(() => {
-    if (status === 'loading') return
+    if (authLoading) return
     
-    if (!authLoading && (!sessionUser || sessionUser.role !== 'ADMIN')) {
+    if (!sessionUser || sessionUser.role !== 'ADMIN') {
       router.push('/signin')
       return
     }
 
     fetchPayments()
-  }, [session, status, router])
+  }, [sessionUser, authLoading, router])
 
   const fetchPayments = async () => {
     try {

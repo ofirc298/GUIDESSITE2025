@@ -1,6 +1,6 @@
 'use client'
 
-import { useSession } from 'next-auth/react'
+import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { FolderOpen, Plus, Search, CreditCard as Edit, Trash2, Eye, EyeOff, MoreVertical, BookOpen } from 'lucide-react'
@@ -22,22 +22,22 @@ interface Category {
 }
 
 export default function CategoriesManagement() {
-  const { data: session, status } = useSession()
+  const { user: sessionUser, loading: authLoading } = useAuth()
   const router = useRouter()
   const [categories, setCategories] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
-    if (status === 'loading') return
+    if (authLoading) return
 
-    if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'CONTENT_MANAGER')) {
+    if (!sessionUser || (sessionUser.role !== 'ADMIN' && sessionUser.role !== 'CONTENT_MANAGER')) {
       router.push('/signin')
       return
     }
 
     fetchCategories()
-  }, [session, status, router])
+  }, [sessionUser, authLoading, router])
 
   const fetchCategories = async () => {
     try {
@@ -122,7 +122,7 @@ export default function CategoriesManagement() {
     )
   }
 
-  if (!session || (session.user.role !== 'ADMIN' && session.user.role !== 'CONTENT_MANAGER')) {
+  if (!sessionUser || (sessionUser.role !== 'ADMIN' && sessionUser.role !== 'CONTENT_MANAGER')) {
     return null
   }
 

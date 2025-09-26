@@ -37,15 +37,15 @@ export default function CoursesManagement() {
   const [filterStatus, setFilterStatus] = useState('')
 
   useEffect(() => {
-    if (status === 'loading') return
+    if (authLoading) return
     
-    if (!authLoading && (!sessionUser || (sessionUser.role !== 'ADMIN' && sessionUser.role !== 'CONTENT_MANAGER'))) {
+    if (!sessionUser || (sessionUser.role !== 'ADMIN' && sessionUser.role !== 'CONTENT_MANAGER')) {
       router.push('/signin')
       return
     }
 
     fetchCourses()
-  }, [session, status, router])
+  }, [sessionUser, authLoading, router])
 
   const fetchCourses = async () => {
     try {

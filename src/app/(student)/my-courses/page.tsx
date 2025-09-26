@@ -48,9 +48,9 @@ export default function MyCourses() {
   const [sortBy, setSortBy] = useState('recent')
 
   useEffect(() => {
-    if (status === 'loading') return
+    if (authLoading) return
     
-    if (!authLoading && !sessionUser) {
+    if (!sessionUser) {
       router.push('/signin')
       return
     }
@@ -61,7 +61,7 @@ export default function MyCourses() {
     }
 
     fetchMyCourses()
-  }, [session, status, router])
+  }, [sessionUser, authLoading, router])
 
   const fetchMyCourses = async () => {
     try {

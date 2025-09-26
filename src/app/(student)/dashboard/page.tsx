@@ -68,9 +68,9 @@ export default function StudentDashboard() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (status === 'loading') return
+    if (authLoading) return
 
-    if (!authLoading && !sessionUser) {
+    if (!sessionUser) {
       router.push('/signin')
       return
     }
@@ -81,7 +81,7 @@ export default function StudentDashboard() {
     }
 
     fetchDashboardData()
-  }, [session, status, router])
+  }, [sessionUser, authLoading, router])
 
   const fetchDashboardData = async () => {
     try {
