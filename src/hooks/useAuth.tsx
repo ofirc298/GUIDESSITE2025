@@ -1,123 +1,61 @@
-'use client'
+"use client";
 
-import { useState, useEffect, createContext, useContext } from 'react'
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-interface SessionUser {
-  id: string
-  email: string
-  name?: string
-  role: 'GUEST' | 'STUDENT' | 'CONTENT_MANAGER' | 'ADMIN'
-}
+export type AuthUser = { id: string; email: string } | null;
 
-interface Session {
-  user: SessionUser
-  expires: string
-}
+export type AuthContextValue = {
+  user: AuthUser;
+  loading: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+};
 
-interface AuthContextType {
-  session: Session | null
-  user: SessionUser | null
-  loading: boolean
-  signIn: (email: string, password: string) => Promise<boolean>
-  signOut: () => Promise<void>
-  refreshSession: () => Promise<void>
-}
-
-const AuthContext = createContext<AuthContextType | null>(null)
-
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider')
-  }
-  return context
-}
-
-export function useSession() {
-  const { session, loading } = useAuth()
-  return {
-    data: session,
-    status: loading ? 'loading' : session ? 'authenticated' : 'unauthenticated'
-  }
-}
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [mounted, setMounted] = useState(false)
+  const [user, setUser] = useState<AuthUser>(null);
+  const [loading, setLoading] = useState(true);
 
-  // Prevent hydration mismatch by only rendering after mount
   useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const fetchSession = async () => {
-    try {
-      const response = await fetch('/api/auth/session')
-      const sessionData = await response.json()
-      setSession(sessionData)
-    } catch (error) {
-      console.error('Error fetching session:', error)
-      setSession(null)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const signIn = async (email: string, password: string): Promise<boolean> => {
-    try {
-      const response = await fetch('/api/auth/signin', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      })
-
-      if (response.ok) {
-        await fetchSession()
-        return true
+    let cancelled = false;
+    (async () => {
+      try {
+        const saved = typeof window !== "undefined" ? localStorage.getItem("demo-user") : null;
+        if (!cancelled) setUser(saved ? JSON.parse(saved) : null);
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-      return false
-    } catch (error) {
-      console.error('Sign in error:', error)
-      return false
-    }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const login = async (email: string, _password: string) => {
+    const next = { id: "1", email };
+    localStorage.setItem("demo-user", JSON.stringify(next));
+    setUser(next);
+  };
+
+  const logout = async () => {
+    localStorage.removeItem("demo-user");
+    setUser(null);
+  };
+
+  const value = useMemo<AuthContextValue>(
+    () => ({ user, loading, login, logout }),
+    [user, loading]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
+export function useAuth(): AuthContextValue {
+  const ctx = useContext(AuthContext);
+  if (!ctx) {
+    // This error is intentional to surface mis-wiring
+    throw new Error("useAuth must be used within AuthProvider");
   }
-
-  const signOut = async () => {
-    try {
-      await fetch('/api/auth/signout', { method: 'POST' })
-      setSession(null)
-      window.location.href = '/'
-    } catch (error) {
-      console.error('Sign out error:', error)
-    }
-  }
-
-  const refreshSession = async () => {
-    await fetchSession()
-  }
-
-  useEffect(() => {
-    fetchSession()
-  }, [])
-
-  // Prevent hydration mismatch
-  if (!mounted) {
-    return <div>{children}</div>
-  }
-
-  const value: AuthContextType = {
-    session,
-    user: session?.user || null,
-    loading,
-    signIn,
-    signOut,
-    refreshSession
-  }
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  )
+  return ctx;
 }

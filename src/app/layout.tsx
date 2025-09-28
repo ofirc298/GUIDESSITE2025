@@ -1,28 +1,19 @@
-import type { Metadata } from 'next'
-import './globals.css'
-import Providers from './providers'
-
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+import type { Metadata } from "next";
+import Providers from "./providers";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'LearnHub - פלטפורמת למידה מתקדמת',
-  description: 'פלטפורמה מתקדמת ללמידה מקוונת עם מדריכים איכותיים ומעקב התקדמות אישי',
-  keywords: 'למידה, קורסים, מדריכים, חינוך, טכנולוגיה',
-}
+  title: "Guides Platform",
+  description: "App shell",
+};
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Server component – do NOT import client hooks here
   return (
     <html lang="he" dir="rtl">
       <body>
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
-  )
+  );
 }

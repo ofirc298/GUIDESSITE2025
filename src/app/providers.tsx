@@ -1,7 +1,8 @@
-'use client'
-import React from 'react'
-import { AuthProvider } from '@/hooks/useAuth'
+"use client";
+
+import React from "react";
+import { AuthProvider } from "@/hooks/useAuth";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
-  return <AuthProvider>{children}</AuthProvider>
+  return <AuthProvider>{children}</AuthProvider>;
 }
