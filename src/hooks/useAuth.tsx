@@ -28,6 +28,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         }
       } catch (error) {
+      }
       const data = await response.json()
       
       if (response.ok && data.user) {
