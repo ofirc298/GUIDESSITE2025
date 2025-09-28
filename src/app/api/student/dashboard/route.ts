@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth/session'
-import { supabase } from '@/lib/supabase' // Ensure supabase is imported
+import { supabase } from '@/lib/supabase'
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 
 export const GET = withRouteLogging(async (request: NextRequest) => {
@@ -77,7 +77,7 @@ export const GET = withRouteLogging(async (request: NextRequest) => {
       totalCourses,
       completedCourses,
       totalHours,
-      currentStreak: Math.min(recentActivityCount, 7) // Max 7 day streak
+      currentStreak: Math.min(recentActivityCount, 7)
     }
 
     // Transform enrollments to include lesson count

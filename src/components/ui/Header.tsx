@@ -9,7 +9,7 @@ import styles from './Header.module.css'
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
-  const { user: sessionUser, logout, loading } = useAuth()
+  const { user: sessionUser, signOut, loading } = useAuth()
 
   // Add logging for session state
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function Header() {
 
   const handleSignOut = () => {
     console.log('🚪 User signing out')
-    logout()
+    signOut()
   }
 
   return (

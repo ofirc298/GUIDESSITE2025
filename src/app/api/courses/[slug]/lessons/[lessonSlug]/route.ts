@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth/session'
-import { supabase } from '@/lib/supabase' // Ensure supabase is imported
+import { supabase } from '@/lib/supabase'
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 import { serialize } from 'next-mdx-remote/serialize'
 
@@ -53,7 +53,7 @@ export const GET = withRouteLogging(async (
         .eq('course_id', course.id)
         .single()
 
-      if (enrollmentError && enrollmentError.code !== 'PGRST116') { // PGRST116 means no rows found
+      if (enrollmentError && enrollmentError.code !== 'PGRST116') {
         console.error('Supabase enrollment check error:', enrollmentError)
         return NextResponse.json(
           { error: 'שגיאה בבדיקת הרשמה' },

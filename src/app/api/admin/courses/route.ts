@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth/session'
-import { supabase } from '@/lib/supabase' // Ensure supabase is imported
+import { supabase } from '@/lib/supabase'
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 
 export const GET = withRouteLogging(async (request: NextRequest) => {
@@ -37,7 +37,7 @@ export const GET = withRouteLogging(async (request: NextRequest) => {
     const transformedCourses = courses?.map(course => ({
       ...course,
       _count: {
-        enrollments: course.enrollments?.length || 0, // Count enrollments
+        enrollments: course.enrollments?.length || 0,
         lessons: course.lessons?.length || 0
       }
     })) || []

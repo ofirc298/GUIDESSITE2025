@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from '@/lib/auth/session'
-import { supabase } from '@/lib/supabase' // Ensure supabase is imported
+import { supabase } from '@/lib/supabase'
 import { withRouteLogging } from '@/lib/api/withRouteLogging'
 
 export const GET = withRouteLogging(async (
@@ -85,10 +85,10 @@ export const PATCH = withRouteLogging(async (
         .select('id')
         .eq('course_id', courseId)
         .eq('slug', slug)
-        .neq('id', lessonId) // Exclude current lesson
+        .neq('id', lessonId)
         .single()
 
-      if (slugCheckError && slugCheckError.code !== 'PGRST116') { // PGRST116 means no rows found
+      if (slugCheckError && slugCheckError.code !== 'PGRST116') {
         console.error('Supabase slug check error:', slugCheckError)
         return NextResponse.json(
           { error: 'שגיאה בבדיקת סלאג קיים' },
@@ -137,7 +137,7 @@ export const DELETE = withRouteLogging(async (
   try {
     const session = await getServerSession()
 
-    if (!session || session.user.role !== 'ADMIN') { // Only ADMIN can delete
+    if (!session || session.user.role !== 'ADMIN') {
       return NextResponse.json(
         { error: 'אין הרשאה' },
         { status: 403 }
