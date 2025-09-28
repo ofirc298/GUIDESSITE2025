@@ -2,13 +2,18 @@
 
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-export type AuthUser = { id: string; email: string } | null;
+export type AuthUser = { 
+  id: string; 
+  email: string; 
+  name?: string;
+  role?: string;
+} | null;
 
 export type AuthContextValue = {
   user: AuthUser;
   loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  logout: () => Promise<void>;
+  signIn: (email: string, password: string) => Promise<boolean>;
+  signOut: () => Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
@@ -18,33 +23,68 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      try {
-        const saved = typeof window !== "undefined" ? localStorage.getItem("demo-user") : null;
-        if (!cancelled) setUser(saved ? JSON.parse(saved) : null);
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
+    checkSession();
   }, []);
 
-  const login = async (email: string, _password: string) => {
-    const next = { id: "1", email };
-    localStorage.setItem("demo-user", JSON.stringify(next));
-    setUser(next);
+  const checkSession = async () => {
+    try {
+      const response = await fetch('/api/auth/session', {
+        credentials: 'include'
+      });
+      
+      if (response.ok) {
+        const session = await response.json();
+        if (session?.user) {
+          setUser(session.user);
+        }
+      }
+    } catch (error) {
+      console.error('Session check failed:', error);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const logout = async () => {
-    localStorage.removeItem("demo-user");
-    setUser(null);
+  const signIn = async (email: string, password: string): Promise<boolean> => {
+    try {
+      const response = await fetch('/api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+        credentials: 'include'
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.user) {
+          setUser(data.user);
+          return true;
+        }
+      }
+      return false;
+    } catch (error) {
+      console.error('Sign in failed:', error);
+      return false;
+    }
+  };
+
+  const signOut = async () => {
+    try {
+      await fetch('/api/auth/signout', {
+        method: 'POST',
+        credentials: 'include'
+      });
+    } catch (error) {
+      console.error('Sign out failed:', error);
+    } finally {
+      setUser(null);
+    }
   };
 
   const value = useMemo<AuthContextValue>(
-    () => ({ user, loading, login, logout }),
+    () => ({ user, loading, signIn, signOut }),
     [user, loading]
   );
 
@@ -54,7 +94,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 export function useAuth(): AuthContextValue {
   const ctx = useContext(AuthContext);
   if (!ctx) {
-    // This error is intentional to surface mis-wiring
     throw new Error("useAuth must be used within AuthProvider");
   }
   return ctx;

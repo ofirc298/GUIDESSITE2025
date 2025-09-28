@@ -8,7 +8,6 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  // Server component – do NOT import client hooks here
   return (
     <html lang="he" dir="rtl">
       <body>
