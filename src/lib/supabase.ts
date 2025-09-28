@@ -3,14 +3,18 @@ import { createClient } from '@supabase/supabase-js'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
 const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
+// Graceful fallback for missing env vars to prevent SSR crashes
+const defaultUrl = 'https://placeholder.supabase.co'
+const defaultKey = 'placeholder-key'
+
 if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error(
-    'Supabase env vars are missing. Define NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY'
-  )
+  console.warn('⚠️ Supabase env vars missing. Using placeholder values.')
 }
 
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+export const supabase = createClient(
+  supabaseUrl || defaultUrl, 
+  supabaseAnonKey || defaultKey
+)
 
 // Types for our database
 export interface User {

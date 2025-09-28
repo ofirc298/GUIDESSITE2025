@@ -2,10 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 import Providers from './providers'
 
-// Make sure this layout never prerenders at build-time
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-export const runtime = 'nodejs'
 
 export const metadata: Metadata = {
   title: 'LearnHub - פלטפורמת למידה מתקדמת',
