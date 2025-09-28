@@ -28,8 +28,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           }
         }
       } catch (error) {
-        console.error('Error fetching session:', error)
-      } finally {
+      const data = await response.json()
+      
+      if (response.ok && data.user) {
+        setUser(data.user)
         setLoading(false)
       }
     }

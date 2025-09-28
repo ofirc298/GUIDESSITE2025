@@ -61,7 +61,7 @@ export default function CourseDetailPage() {
 
   useEffect(() => {
     if (params.slug) {
-      fetchCourse(params.slug as string) // Re-fetch when sessionUser changes to update enrollment status
+      fetchCourse(params.slug as string)
     }
   }, [params.slug, sessionUser])
 
