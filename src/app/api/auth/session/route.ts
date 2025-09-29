@@ -22,3 +22,4 @@ export async function GET() {
     try { cookies().delete('auth-token') } catch {}
     return NextResponse.json(null)
   }
+}
