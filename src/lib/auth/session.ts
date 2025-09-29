@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
 import { supabase } from '@/lib/supabase'
+import { tracer } from '@/lib/debug/trace'
 
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'dev-secret-change-me'
 
@@ -51,8 +52,15 @@ export async function clearSessionCookie() {
 export async function getJwtSession(): Promise<Session | null> {
   try {
     const token = cookies().get('auth-token')?.value
-    if (!token) return null
+    if (!token) {
+      tracer.debug('session', 'No auth-token cookie found')
+      return null
+    }
+    
+    tracer.debug('session', 'Attempting to verify JWT token')
     const payload = jwt.verify(token, JWT_SECRET) as any
+    tracer.info('session', 'JWT token verified successfully', { userId: payload.sub, email: payload.email })
+
     return {
       user: {
         id: payload.sub,
@@ -62,7 +70,10 @@ export async function getJwtSession(): Promise<Session | null> {
       },
       expires: new Date(payload.exp * 1000).toISOString(),
     }
-  } catch {
+  } catch (error) {
+    tracer.error('session', 'JWT verification failed', { error: (error as Error).message, stack: (error as Error).stack })
+    // חשוב: נקה את העוגייה הלא חוקית כדי למנוע שגיאות חוזרות
+    cookies().delete('auth-token')
     return null
   }
 }
