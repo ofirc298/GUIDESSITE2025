@@ -1,62 +1,40 @@
 'use client'
 
-import { useState, useEffect, createContext, useContext } from 'react'
+import React, { createContext, useContext, useMemo, useState, ReactNode } from 'react'
 
-interface SessionUser {
-  id: string
-  email: string
-  name?: string
-  role: 'GUEST' | 'STUDENT' | 'CONTENT_MANAGER' | 'ADMIN'
-}
-
-interface Session {
-  user: SessionUser
-  expires: string
-}
-
-interface AuthContextType {
-  session: Session | null
-  user: SessionUser | null
+type AuthState = {
+  user: { id: string; email: string; name?: string; role: string } | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<boolean>
   signOut: () => Promise<void>
-  refreshSession: () => Promise<void>
 }
 
-const AuthContext = createContext<AuthContextType | null>(null)
+const AuthContext = createContext<AuthState | null>(null)
 
-export function useAuth() {
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth must be used within AuthProvider')
-  }
-  return context
-}
-
-export function useSession() {
-  const { session, loading } = useAuth()
-  return {
-    data: session,
-    status: loading ? 'loading' : session ? 'authenticated' : 'unauthenticated'
-  }
-}
-
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null)
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<AuthState['user']>(null)
   const [loading, setLoading] = useState(true)
 
-  const fetchSession = async () => {
-    try {
-      const response = await fetch('/api/auth/session')
-      const sessionData = await response.json()
-      setSession(sessionData)
-    } catch (error) {
-      console.error('Error fetching session:', error)
-      setSession(null)
-    } finally {
-      setLoading(false)
+  // Simulate loading and session check
+  React.useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const response = await fetch('/api/auth/session')
+        if (response.ok) {
+          const sessionData = await response.json()
+          if (sessionData) {
+            setUser(sessionData.user)
+          }
+        }
+      } catch (error) {
+        console.error('Session check failed:', error)
+      } finally {
+        setLoading(false)
+      }
     }
-  }
+
+    checkSession()
+  }, [])
 
   const signIn = async (email: string, password: string): Promise<boolean> => {
     try {
@@ -67,7 +45,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       })
 
       if (response.ok) {
-        await fetchSession()
+        const data = await response.json()
+        setUser(data.user)
         return true
       }
       return false
@@ -80,33 +59,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     try {
       await fetch('/api/auth/signout', { method: 'POST' })
-      setSession(null)
+      setUser(null)
       window.location.href = '/'
     } catch (error) {
       console.error('Sign out error:', error)
     }
   }
 
-  const refreshSession = async () => {
-    await fetchSession()
+  const value = useMemo(() => ({ user, loading, signIn, signOut }), [user, loading])
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+
+export function useAuth() {
+  const ctx = useContext(AuthContext)
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider')
+  return ctx
+}
+
+// For backward compatibility
+export function useSession() {
+  const { user, loading } = useAuth()
+  return {
+    data: user ? { user } : null,
+    status: loading ? 'loading' : user ? 'authenticated' : 'unauthenticated'
   }
-
-  useEffect(() => {
-    fetchSession()
-  }, [])
-
-  const value: AuthContextType = {
-    session,
-    user: session?.user || null,
-    loading,
-    signIn,
-    signOut,
-    refreshSession
-  }
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  )
 }
