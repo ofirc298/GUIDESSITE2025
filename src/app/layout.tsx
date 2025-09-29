@@ -3,7 +3,7 @@ import './globals.css'
 import Providers from './providers'
 import ClientErrorReporter from './ClientErrorReporter'
 
-// Make sure this layout never prerenders at build-time
+// חשוב: שרת בלבד, אין Edge
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -20,7 +20,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="he" dir="rtl">
+    <html lang="he" dir="rtl" suppressHydrationWarning>
       <body>
         <ClientErrorReporter />
         <Providers>

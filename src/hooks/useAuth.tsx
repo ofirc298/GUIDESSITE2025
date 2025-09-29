@@ -1,9 +1,10 @@
 'use client'
 
-import React, { createContext, useContext, useMemo, useState, ReactNode } from 'react'
+import React, { createContext, useContext, useMemo, useState, useEffect } from 'react'
 
+type User = { id: string; email: string; name?: string; role: string }
 type AuthState = {
-  user: { id: string; email: string; name?: string; role: string } | null
+  user: User | null
   loading: boolean
   signIn: (email: string, password: string) => Promise<boolean>
   signOut: () => Promise<void>
@@ -11,47 +12,41 @@ type AuthState = {
 
 const AuthContext = createContext<AuthState | null>(null)
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthState['user']>(null)
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
-  // Simulate loading and session check
-  React.useEffect(() => {
-    const checkSession = async () => {
+  // בדיקת סשן לקוחית אחרי mount (מונע פער SSR/CSR)
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
       try {
-        const response = await fetch('/api/auth/session')
-        if (response.ok) {
-          const sessionData = await response.json()
-          if (sessionData) {
-            setUser(sessionData.user)
-          }
+        const res = await fetch('/api/auth/session', { cache: 'no-store' })
+        const data = await res.json()
+        if (!cancelled) {
+          setUser(data?.user ?? null)
         }
-      } catch (error) {
-        console.error('Session check failed:', error)
+      } catch (e) {
+        console.error('session check failed', e)
       } finally {
-        setLoading(false)
+        if (!cancelled) setLoading(false)
       }
-    }
-
-    checkSession()
+    })()
+    return () => { cancelled = true }
   }, [])
 
-  const signIn = async (email: string, password: string): Promise<boolean> => {
+  const signIn = async (email: string, password: string) => {
     try {
-      const response = await fetch('/api/auth/signin', {
+      const res = await fetch('/api/auth/signin', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       })
-
-      if (response.ok) {
-        const data = await response.json()
-        setUser(data.user)
-        return true
-      }
-      return false
-    } catch (error) {
-      console.error('Sign in error:', error)
+      if (!res.ok) return false
+      const data = await res.json()
+      setUser(data?.user ?? null)
+      return true
+    } catch {
       return false
     }
   }
@@ -59,10 +54,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signOut = async () => {
     try {
       await fetch('/api/auth/signout', { method: 'POST' })
+    } finally {
       setUser(null)
-      window.location.href = '/'
-    } catch (error) {
-      console.error('Sign out error:', error)
     }
   }
 
@@ -76,11 +69,11 @@ export function useAuth() {
   return ctx
 }
 
-// For backward compatibility
+// תאימות לאתרים שהשתמשו useSession
 export function useSession() {
   const { user, loading } = useAuth()
   return {
     data: user ? { user } : null,
-    status: loading ? 'loading' : user ? 'authenticated' : 'unauthenticated'
+    status: loading ? 'loading' : user ? 'authenticated' : 'unauthenticated',
   }
 }
