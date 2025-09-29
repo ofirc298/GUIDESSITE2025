@@ -1,6 +1,7 @@
 // Health check endpoint with comprehensive diagnostics
 import { NextRequest, NextResponse } from 'next/server';
 import { withRouteLogging } from '@/lib/api/withRouteLogging';
+import { tracer } from '@/lib/debug/trace';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';

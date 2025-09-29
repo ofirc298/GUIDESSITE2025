@@ -1,8 +1,7 @@
 import React from 'react'
-import { MDXRemote, MDXRemoteProps } from 'next-mdx-remote'
+import { MDXRemote } from 'next-mdx-remote/rsc' // חשוב: גרסת RSC
 import styles from './MdxRenderer.module.css'
 
-// Define custom components if needed for MDX
 const components = {
   h1: (props: any) => <h1 className={styles.h1} {...props} />,
   h2: (props: any) => <h2 className={styles.h2} {...props} />,
@@ -15,11 +14,10 @@ const components = {
   blockquote: (props: any) => <blockquote className={styles.blockquote} {...props} />,
   code: (props: any) => <code className={styles.code} {...props} />,
   pre: (props: any) => <pre className={styles.pre} {...props} />,
-  // Add more custom components as needed
 }
 
 interface MdxRendererProps {
-  source: MDXRemoteProps['source']
+  source: any
 }
 
 export default function MdxRenderer({ source }: MdxRendererProps) {
@@ -28,7 +26,7 @@ export default function MdxRenderer({ source }: MdxRendererProps) {
   }
   return (
     <div className={styles.mdxContent}>
-      <MDXRemote {...source} components={components} />
+      <MDXRemote source={source} components={components} />
     </div>
   )
 }

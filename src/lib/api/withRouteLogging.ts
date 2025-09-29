@@ -1,3 +1,6 @@
+// בתחילת הקובץ:
+import '@/lib/server-hooks'
+
 import { NextRequest, NextResponse } from "next/server";
 import { log } from "@/lib/log";
 

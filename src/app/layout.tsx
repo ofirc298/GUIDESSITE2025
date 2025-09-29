@@ -1,11 +1,12 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import Providers from './providers'
+import ClientErrorReporter from './ClientErrorReporter'
 
 // Make sure this layout never prerenders at build-time
+export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-export const runtime = 'nodejs'
 
 export const metadata: Metadata = {
   title: 'LearnHub - פלטפורמת למידה מתקדמת',
@@ -21,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="he" dir="rtl">
       <body>
+        <ClientErrorReporter />
         <Providers>
           {children}
         </Providers>

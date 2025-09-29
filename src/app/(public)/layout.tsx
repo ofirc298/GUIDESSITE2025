@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
 
+export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 

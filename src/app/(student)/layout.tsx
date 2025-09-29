@@ -6,9 +6,9 @@ import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
 
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'your-secret-key'
+export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-export const runtime = 'nodejs'
 
 export default async function StudentLayout({ children }: { children: ReactNode }) {
   let role: string | null = null

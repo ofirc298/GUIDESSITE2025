@@ -4,9 +4,9 @@ import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
 
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'your-secret-key'
+export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-export const runtime = 'nodejs'
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   try {

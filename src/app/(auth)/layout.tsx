@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 
 // Make sure this layout never prerenders at build-time
+export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
-export const runtime = 'nodejs'
 
 export default function AuthLayout({ children }: { children: ReactNode }) { // AuthProvider is now in RootLayout
   return (

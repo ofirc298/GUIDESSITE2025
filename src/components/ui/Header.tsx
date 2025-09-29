@@ -27,6 +27,58 @@ export default function Header() {
     signOut()
   }
 
+  // שלד בזמן טעינה – שמור מבנה DOM זהה
+  if (loading) {
+    return (
+      <header className={styles.header}>
+        <div className="container">
+          <div className={styles.headerContent}>
+            {/* Logo */}
+            <Link href="/" className={styles.logo}>
+              <BookOpen size={24} />
+              <span>LearnHub</span>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <nav className={styles.nav}>
+              <Link href="/courses" className={styles.navLink}>
+                קורסים
+              </Link>
+              <span className={styles.skeletonLink}></span>
+            </nav>
+
+            {/* User Section Skeleton */}
+            <div className={styles.userSection}>
+              <div className={styles.skeletonButtons}>
+                <span className={styles.skeletonBtn}></span>
+                <span className={styles.skeletonBtn}></span>
+              </div>
+
+              {/* Mobile Menu Button */}
+              <button
+                className={styles.mobileMenuButton}
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Menu */}
+          {isMenuOpen && (
+            <div className={styles.mobileMenu}>
+              <Link href="/courses" className={styles.mobileNavLink}>
+                קורסים
+              </Link>
+              <span className={styles.skeletonMobileLink}></span>
+              <span className={styles.skeletonMobileLink}></span>
+            </div>
+          )}
+        </div>
+      </header>
+    )
+  }
+
   return (
     <header className={styles.header}>
       <div className="container">
@@ -51,7 +103,7 @@ export default function Header() {
 
           {/* User Section */}
           <div className={styles.userSection}>
-            {loading ? (<div>טוען...</div>) : sessionUser ? (
+            {sessionUser ? (
               <div className={styles.userMenu}>
                 <button
                   onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
