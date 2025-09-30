@@ -1,3 +1,4 @@
+```tsx
 import NextAuth from "next-auth"
 import { getAuthOptions } from "@/lib/auth/options"
 
@@ -14,3 +15,4 @@ export async function POST(req: Request, ctx: any) {
   const handler = NextAuth(getAuthOptions())
   return handler(req, ctx)
 }
+```

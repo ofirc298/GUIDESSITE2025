@@ -1,3 +1,4 @@
+```tsx
 'use client'
 
 import React, { createContext, useContext, useMemo, useState, useEffect } from 'react'
@@ -77,3 +78,4 @@ export function useSession() {
     status: loading ? 'loading' : user ? 'authenticated' : 'unauthenticated',
   }
 }
+```

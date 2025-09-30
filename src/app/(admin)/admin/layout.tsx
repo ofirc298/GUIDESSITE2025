@@ -1,3 +1,4 @@
+```tsx
 import type { ReactNode } from 'react'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
@@ -20,3 +21,4 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   }
   return <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>{children}</div>
 }
+```

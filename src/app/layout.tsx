@@ -1,3 +1,5 @@
+```tsx
+// src/app/layout.tsx
 import type { Metadata } from 'next'
 import './globals.css'
 import Providers from './providers'
@@ -14,19 +16,14 @@ export const metadata: Metadata = {
   keywords: 'למידה, קורסים, מדריכים, חינוך, טכנולוגיה',
 }
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="he" dir="rtl" suppressHydrationWarning>
       <body>
         <ClientErrorReporter />
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )
 }
+```
