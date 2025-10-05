@@ -113,7 +113,7 @@ export default function HomePage() {
           <div className={styles.ctaContent}>
             <h2>מוכן להתחיל את המסע שלך?</h2>
             <p>הצטרף אלינו היום וקבל גישה למאות מדריכים איכותיים</p>
-            <Link href="/auth/signup" className="btn btn-primary">
+            <Link href="/signup" className="btn btn-primary">
               הרשם בחינם
               <ArrowLeft size={20} />
             </Link>

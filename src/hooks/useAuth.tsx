@@ -15,16 +15,17 @@ const AuthContext = createContext<AuthCtx | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     let aborted = false;
-    setLoading(true);
     (async () => {
       try {
         const res = await fetch("/api/auth/session", { cache: "no-store" });
-        const { user } = await res.json();
-        if (!aborted) setUser(user ?? null);
+        const data = await res.json();
+        if (!aborted) setUser(data?.user ?? null);
       } catch {
         if (!aborted) setUser(null);
       } finally {
@@ -37,10 +38,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = async (body?: any) => {
-    await fetch("/api/auth/signin", { method: "POST", body: JSON.stringify(body) });
+    await fetch("/api/auth/signin", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body)
+    });
     const res = await fetch("/api/auth/session", { cache: "no-store" });
-    const { user } = await res.json();
-    setUser(user ?? null);
+    const data = await res.json();
+    setUser(data?.user ?? null);
   };
 
   const signOut = async () => {
@@ -49,6 +54,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const value = useMemo<AuthCtx>(() => ({ user, loading, signIn, signOut }), [user, loading]);
+
+  if (!mounted) {
+    return <AuthContext.Provider value={{ user: null, loading: true, signIn, signOut }}>{children}</AuthContext.Provider>;
+  }
+
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 

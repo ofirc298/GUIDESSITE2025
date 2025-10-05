@@ -11,7 +11,9 @@ export const revalidate = 0
 export async function GET() {
   try {
     const token = cookies().get('auth-token')?.value
-    if (!token) return NextResponse.json(null)
+    if (!token) {
+      return NextResponse.json({ user: null })
+    }
     const payload: any = jwt.verify(token, JWT_SECRET)
     return NextResponse.json({
       user: { id: payload.sub, email: payload.email, name: payload.name, role: payload.role },
@@ -19,6 +21,6 @@ export async function GET() {
     })
   } catch (e) {
     try { cookies().delete('auth-token') } catch {}
-    return NextResponse.json(null)
+    return NextResponse.json({ user: null })
   }
 }
