@@ -3,7 +3,7 @@
 import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Gift, Search, Plus, CreditCard as Edit, Trash2, User, Mail, Calendar, Clock } from 'lucide-react'
+import { Gift, Search, Plus, CreditCard as Edit, Trash2, User, Mail, Calendar, Clock, Users } from 'lucide-react'
 import styles from './invite-codes.module.css'
 
 interface InviteCode {

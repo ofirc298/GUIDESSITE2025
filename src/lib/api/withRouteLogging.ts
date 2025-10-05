@@ -1,16 +1,15 @@
-// בתחילת הקובץ:
 import '@/lib/server-hooks'
 
 import { NextRequest, NextResponse } from "next/server";
 import { log } from "@/lib/log";
 
-export function withRouteLogging(handler: (req: NextRequest) => Promise<Response>) {
-  return async (req: NextRequest) => {
+export function withRouteLogging<T = any>(handler: (req: NextRequest, context?: T) => Promise<Response>) {
+  return async (req: NextRequest, context?: T) => {
     const start = Date.now();
     const url = req.nextUrl.pathname + req.nextUrl.search;
     try {
       log.info("api", `→ ${req.method} ${url}`);
-      const res = await handler(req);
+      const res = await handler(req, context);
       const ms = Date.now() - start;
       log.info("api", `← ${req.method} ${url} ${res.status} in ${ms}ms`);
       return res;

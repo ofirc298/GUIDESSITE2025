@@ -17,7 +17,7 @@ interface Lesson {
   order: number
   is_active: boolean
   course_id: string
-  mdxSource: MDXRemoteProps['source']
+  mdxSource: any
   isEnrolled: boolean
   courseSlug: string
 }

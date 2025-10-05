@@ -1,10 +1,12 @@
+"use client";
+
 export default function LoadingCourses() {
   return (
-    <div style={{ 
-      minHeight: '50vh', 
-      display: 'flex', 
+    <div style={{
+      minHeight: '50vh',
+      display: 'flex',
       flexDirection: 'column',
-      alignItems: 'center', 
+      alignItems: 'center',
       justifyContent: 'center',
       gap: '1rem'
     }}>

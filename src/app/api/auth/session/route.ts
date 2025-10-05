@@ -1,4 +1,3 @@
-```tsx
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
@@ -19,9 +18,7 @@ export async function GET() {
       expires: new Date(payload.exp * 1000).toISOString(),
     })
   } catch (e) {
-    // אל תזרוק; נקה עוגייה אם צריך
     try { cookies().delete('auth-token') } catch {}
     return NextResponse.json(null)
   }
 }
-```

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { 
@@ -92,7 +92,7 @@ export default function NewCourse() {
   }
 
   // Load categories on mount
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchCategories = async () => {
       try {
         const response = await fetch('/api/admin/categories')

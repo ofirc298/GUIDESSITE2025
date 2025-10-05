@@ -3,7 +3,7 @@
 
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-type User = { id: string; name?: string; role?: string } | null;
+type User = { id: string; name?: string; email?: string; role?: string } | null;
 type AuthCtx = {
   user: User;
   loading: boolean;
@@ -15,10 +15,11 @@ const AuthContext = createContext<AuthCtx | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     let aborted = false;
+    setLoading(true);
     (async () => {
       try {
         const res = await fetch("/api/auth/session", { cache: "no-store" });

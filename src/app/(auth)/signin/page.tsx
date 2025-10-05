@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
@@ -12,12 +12,12 @@ export default function SignInPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false) // Keep local loading state for form submission
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { signIn, user } = useAuth()
 
   // Redirect if already logged in
-  React.useEffect(() => {
+  useEffect(() => {
     if (user) {
       router.push('/dashboard')
     }
@@ -29,16 +29,11 @@ export default function SignInPage() {
     setIsLoading(true)
 
     try {
-      const success = await signIn(email, password)
-      if (success) {
-        router.push('/dashboard') // Redirect to dashboard after successful login
-      } else {
-        setError('אימייל או סיסמה שגויים')
-        // Clear password on failed login attempt for security
-        setPassword('');
-      }
+      await signIn({ email, password })
+      router.push('/dashboard')
     } catch (error) {
-      setError('אירעה שגיאה. נסה שוב.')
+      setError('אימייל או סיסמה שגויים')
+      setPassword('')
     } finally {
       setIsLoading(false)
     }
