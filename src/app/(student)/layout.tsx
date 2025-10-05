@@ -1,28 +1,31 @@
+"use client";
+
 import type { ReactNode } from 'react'
-import { redirect } from 'next/navigation'
-import { cookies } from 'next/headers'
-import jwt from 'jsonwebtoken'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 import DynamicHeader from '@/components/ui/DynamicHeader'
 import Footer from '@/components/ui/Footer'
+import { AuthProvider, useAuth } from '@/hooks/useAuth'
 
-const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'your-secret-key'
-export const runtime = 'nodejs'
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+function StudentLayoutContent({ children }: { children: ReactNode }) {
+  const { user, loading } = useAuth()
+  const router = useRouter()
 
-export default async function StudentLayout({ children }: { children: ReactNode }) {
-  let role: string | null = null
-  try {
-    const token = cookies().get('auth-token')?.value
-    if (!token) throw 0
-    const payload = jwt.verify(token, JWT_SECRET) as any
-    role = payload.role
-  } catch {
-    redirect('/signin')
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push('/signin')
+    }
+    if (!loading && user && (user.role === 'ADMIN' || user.role === 'CONTENT_MANAGER')) {
+      router.push('/admin')
+    }
+  }, [user, loading, router])
+
+  if (loading) {
+    return <div>טוען...</div>
   }
 
-  if (role === 'ADMIN' || role === 'CONTENT_MANAGER') {
-    redirect('/admin')
+  if (!user) {
+    return null
   }
 
   return (
@@ -31,5 +34,13 @@ export default async function StudentLayout({ children }: { children: ReactNode 
       <main style={{ flex: 1 }}>{children}</main>
       <Footer />
     </div>
+  )
+}
+
+export default function StudentLayout({ children }: { children: ReactNode }) {
+  return (
+    <AuthProvider>
+      <StudentLayoutContent>{children}</StudentLayoutContent>
+    </AuthProvider>
   )
 }
