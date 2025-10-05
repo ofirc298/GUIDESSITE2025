@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import ClientHeader from '@/components/ui/ClientHeader'
+import Header from '@/components/ui/Header'
 import Footer from '@/components/ui/Footer'
 
 export const runtime = 'nodejs'
@@ -9,7 +9,7 @@ export const revalidate = 0
 export default function SiteLayout({ children }: { children: ReactNode }) {
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <ClientHeader />
+      <Header />
       <main style={{ flex: 1 }}>
         {children}
       </main>

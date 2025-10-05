@@ -16,10 +16,8 @@ const AuthContext = createContext<AuthCtx | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User>(null);
   const [loading, setLoading] = useState(true);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     let aborted = false;
     (async () => {
       try {
@@ -54,10 +52,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const value = useMemo<AuthCtx>(() => ({ user, loading, signIn, signOut }), [user, loading]);
-
-  if (!mounted) {
-    return <AuthContext.Provider value={{ user: null, loading: true, signIn, signOut }}>{children}</AuthContext.Provider>;
-  }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
