@@ -2,7 +2,7 @@ import type { ReactNode } from 'react'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import jwt from 'jsonwebtoken'
-import Header from '@/components/ui/Header'
+import DynamicHeader from '@/components/ui/DynamicHeader'
 import Footer from '@/components/ui/Footer'
 
 const JWT_SECRET = process.env.NEXTAUTH_SECRET || 'your-secret-key'
@@ -27,7 +27,7 @@ export default async function StudentLayout({ children }: { children: ReactNode 
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Header />
+      <DynamicHeader />
       <main style={{ flex: 1 }}>{children}</main>
       <Footer />
     </div>
