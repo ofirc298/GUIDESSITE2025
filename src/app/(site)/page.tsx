@@ -1,3 +1,5 @@
+"use client";
+
 import Link from 'next/link'
 import { BookOpen, Users, Award, TrendingUp, ArrowLeft } from 'lucide-react'
 import styles from './page.module.css'

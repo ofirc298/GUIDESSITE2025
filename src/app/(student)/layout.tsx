@@ -3,11 +3,10 @@
 import type { ReactNode } from 'react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import DynamicHeader from '@/components/ui/DynamicHeader'
-import Footer from '@/components/ui/Footer'
-import { AuthProvider, useAuth } from '@/hooks/useAuth'
+import AuthenticatedLayout from '@/components/layouts/AuthenticatedLayout'
+import { useAuth } from '@/hooks/useAuth'
 
-function StudentLayoutContent({ children }: { children: ReactNode }) {
+function StudentProtectedContent({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth()
   const router = useRouter()
 
@@ -21,26 +20,20 @@ function StudentLayoutContent({ children }: { children: ReactNode }) {
   }, [user, loading, router])
 
   if (loading) {
-    return <div>טוען...</div>
+    return <div style={{ padding: '2rem', textAlign: 'center' }}>טוען...</div>
   }
 
   if (!user) {
     return null
   }
 
-  return (
-    <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <DynamicHeader />
-      <main style={{ flex: 1 }}>{children}</main>
-      <Footer />
-    </div>
-  )
+  return <>{children}</>
 }
 
 export default function StudentLayout({ children }: { children: ReactNode }) {
   return (
-    <AuthProvider>
-      <StudentLayoutContent>{children}</StudentLayoutContent>
-    </AuthProvider>
+    <AuthenticatedLayout>
+      <StudentProtectedContent>{children}</StudentProtectedContent>
+    </AuthenticatedLayout>
   )
 }

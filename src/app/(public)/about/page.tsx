@@ -1,3 +1,5 @@
+"use client";
+
 import { BookOpen, Users, Award, Target, Heart, Lightbulb } from 'lucide-react'
 import styles from './about.module.css'
 

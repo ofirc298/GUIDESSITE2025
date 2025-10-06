@@ -49,6 +49,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const signOut = async () => {
     await fetch("/api/auth/signout", { method: "POST" });
     setUser(null);
+    if (typeof window !== 'undefined') {
+      window.location.href = '/';
+    }
   };
 
   const value = useMemo<AuthCtx>(() => ({ user, loading, signIn, signOut }), [user, loading]);
