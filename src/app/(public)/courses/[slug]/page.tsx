@@ -4,10 +4,10 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
-import { 
-  BookOpen, 
-  Clock, 
-  Users, 
+import {
+  BookOpen,
+  Clock,
+  Users,
   Star,
   Play,
   CheckCircle,
@@ -17,6 +17,7 @@ import {
   Lock,
   User
 } from 'lucide-react'
+import CourseMaterials from '@/components/course/CourseMaterials'
 import styles from './course-detail.module.css'
 
 interface Course {
@@ -261,7 +262,7 @@ export default function CourseDetailPage() {
                     )}
                   </div>
                 ))}
-                
+
                 {course.lessons.length === 0 && (
                   <div className={styles.noLessons}>
                     <BookOpen size={48} />
@@ -270,6 +271,9 @@ export default function CourseDetailPage() {
                 )}
               </div>
             </div>
+
+            {/* Course Materials */}
+            <CourseMaterials courseId={course.id} isEnrolled={course.isEnrolled} />
           </div>
 
           {/* Sidebar */}

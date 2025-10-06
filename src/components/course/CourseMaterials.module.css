@@ -1,0 +1,180 @@
+.container {
+  margin: 2rem 0;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 1.5rem 0;
+}
+
+.loading {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+}
+
+.lockNotice {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: #fef3c7;
+  border: 1px solid #fbbf24;
+  border-radius: 8px;
+  color: #92400e;
+  margin-bottom: 1.5rem;
+}
+
+.lockNotice p {
+  margin: 0;
+  font-weight: 500;
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.group {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.groupHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  background: #f9fafb;
+  border-right: 4px solid;
+}
+
+.groupHeader h3 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.count {
+  padding: 0.25rem 0.75rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+}
+
+.materialsList {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.materialCard {
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.2s;
+}
+
+.materialCard:hover {
+  border-color: #d1d5db;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.materialHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  gap: 1rem;
+}
+
+.materialInfo {
+  flex: 1;
+}
+
+.materialTitle {
+  margin: 0 0 0.25rem 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.materialDescription {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+.expandButton {
+  padding: 0.5rem 1rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.expandButton:hover {
+  background: #2563eb;
+}
+
+.lockIcon {
+  color: #9ca3af;
+}
+
+.materialContent {
+  padding: 1.5rem;
+  background: #f9fafb;
+  border-top: 1px solid #e5e7eb;
+}
+
+.contentText {
+  margin: 0;
+  padding: 1.5rem;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
+  color: #1f2937;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  direction: rtl;
+  text-align: right;
+  overflow-x: auto;
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem 1rem;
+  }
+
+  .materialHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .expandButton {
+    width: 100%;
+  }
+}
