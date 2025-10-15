@@ -20,13 +20,25 @@ export interface Session {
 }
 
 export async function getUserByEmail(email: string) {
+  console.log('[getUserByEmail] Querying for email:', email)
+
   const { data: user, error } = await supabase
     .from('users')
     .select('id, email, name, role, password')
     .eq('email', email)
     .single()
 
-  if (error || !user) return null
+  if (error) {
+    console.error('[getUserByEmail] Supabase error:', error)
+    return null
+  }
+
+  if (!user) {
+    console.log('[getUserByEmail] No user found')
+    return null
+  }
+
+  console.log('[getUserByEmail] User found:', { id: user.id, email: user.email, role: user.role })
   return user
 }
 

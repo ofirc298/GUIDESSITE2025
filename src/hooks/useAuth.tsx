@@ -36,11 +36,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signIn = async (body?: any) => {
-    await fetch("/api/auth/signin", {
+    const signinRes = await fetch("/api/auth/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(body)
     });
+
+    const signinData = await signinRes.json();
+
+    if (!signinRes.ok) {
+      throw new Error(signinData.error || 'Login failed');
+    }
+
     const res = await fetch("/api/auth/session", { cache: "no-store" });
     const data = await res.json();
     setUser(data?.user ?? null);

@@ -7,6 +7,8 @@ export const POST = withRouteLogging(async (request: NextRequest) => {
   try {
     const { email, password } = await request.json()
 
+    console.log('[SIGNIN] Attempting login for:', email)
+
     if (!email || !password) {
       return NextResponse.json(
         { error: 'אימייל וסיסמה נדרשים' },
@@ -15,16 +17,25 @@ export const POST = withRouteLogging(async (request: NextRequest) => {
     }
 
     // Get user from database
+    console.log('[SIGNIN] Fetching user from database...')
     const user = await getUserByEmail(email)
+    console.log('[SIGNIN] User found:', user ? 'YES' : 'NO')
+
     if (!user) {
+      console.log('[SIGNIN] User not found in database')
       return NextResponse.json(
         { error: 'אימייל או סיסמה שגויים' },
         { status: 401 }
       )
     }
 
+    console.log('[SIGNIN] User role:', user.role)
+    console.log('[SIGNIN] Verifying password...')
+
     // Verify password
     const isValidPassword = await bcrypt.compare(password, user.password)
+    console.log('[SIGNIN] Password valid:', isValidPassword)
+
     if (!isValidPassword) {
       return NextResponse.json(
         { error: 'אימייל או סיסמה שגויים' },
@@ -40,7 +51,9 @@ export const POST = withRouteLogging(async (request: NextRequest) => {
       role: user.role
     }
 
+    console.log('[SIGNIN] Setting session cookie...')
     await setSessionCookie(sessionUser)
+    console.log('[SIGNIN] Login successful!')
 
     return NextResponse.json({
       success: true,
@@ -48,7 +61,7 @@ export const POST = withRouteLogging(async (request: NextRequest) => {
     })
 
   } catch (error) {
-    console.error('Sign in error:', error)
+    console.error('[SIGNIN] Sign in error:', error)
     return NextResponse.json(
       { error: 'אירעה שגיאה בהתחברות' },
       { status: 500 }
